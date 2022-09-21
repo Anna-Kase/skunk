@@ -102,3 +102,5 @@ site_m <- units::drop_units(site_m)
 site_m[site_m <= l] <- 1
 site_m[site_m > l] <- 0
 diag(site_m) <- 0
+
+
