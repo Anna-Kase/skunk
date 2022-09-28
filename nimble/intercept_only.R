@@ -25,7 +25,7 @@ my_model <- nimble::nimbleCode({
       ))
       lin_pred[i, t-1] <- (z[i, t-1] * phi) + #persistence
        ((1-z[i, t-1])*zeta[i, t-1]*delta_bar[i, t-1]) + #neighborhood colonization
-        ((1-z[i, t-1])*(1-zeta[i, t-1])*gamma)
+        ((1-z[i, t-1])*(1-zeta[i, t-1])*gamma) #out of neighborhood colonization
       z[i,t] ~ dbern(lin_pred[i,t-1])
     }
   }
@@ -45,3 +45,4 @@ my_model <- nimble::nimbleCode({
     d_vec[i] <- d
   }
 })
+
