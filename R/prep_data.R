@@ -4,18 +4,7 @@
 
 # intercept only model
 if(model_type == "intercept"){
-  #data list
-  data_list <- list(
-    y=y
-  )
-  
-  #constant list
-  constant_list <- list(
-    J=J,
-    nsite=nsite,
-    nseason=nseason,
-    m=site_m
-  ) 
+
   
   dat <- dat[grep("18|19", dat$Season),]
   
@@ -41,6 +30,19 @@ if(model_type == "intercept"){
   )
   
   y[J==0] <- NA
+  
+  #data list
+  data_list <- list(
+    y=y
+  )
+  
+  #constant list
+  constant_list <- list(
+    J=J,
+    nsite=nsite,
+    nseason=nseason,
+    m=site_m
+  ) 
   
 }
 
