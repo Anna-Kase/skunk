@@ -9,7 +9,7 @@ cov_model <- nimble::nimbleCode({
     z[i,1] ~ dbern(psi[i,1])
     delta_bar[i,1] <- (1 - exp(
       inprod(
-        (z[i:nsite, 1]*m[i,1:nsite]),
+        (z[1:nsite, 1]*m[i,1:nsite]),
         log(1-d_vec[i,1:nsite]) 
       )
     ))
@@ -18,8 +18,7 @@ cov_model <- nimble::nimbleCode({
       zeta[i,t-1] <- step(
         inprod(
           z[1:nsite, t-1],
-          m[i, 1:nsite]
-        )-1
+          m[i, 1:nsite])-1
       )
       delta_bar[i,t] <- (1 - exp(
         inprod(
