@@ -47,7 +47,7 @@ if(model_type == "intercept"){
 # covariate model 1 (urb)
 if(model_type == "covariate"){
   
-  dat <- dat[grep("18", dat$Season),]
+  dat <- dat[grep("18|19", dat$Season),]
   
   dat$Season <- factor(dat$Season, levels=unique(dat$Season))
   
