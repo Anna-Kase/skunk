@@ -87,3 +87,26 @@ View(more_covariates)
 # write.csv(more_covariates, "./data/site_covariates.csv", row.names = FALSE)
 
 
+
+
+
+sites$dist <- select_dist$water_dist
+
+#Create a function to generate a continuous color palette
+rbPal <- colorRampPalette(c('blue','red'))
+
+#This adds a column of color values
+# based on the y values
+sites$col <- rbPal(100)[as.numeric(cut(sites$dist,breaks = 100))]
+
+plot(small_water$geometry)
+plot(sites$geometry, pch = 20, col = sites$col, cex=2, add=TRUE)
+
+range(sites$dist)
+
+
+site_coords <- read.csv(
+  "./data/full_capture_history.csv"
+)
+
+
