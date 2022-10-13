@@ -4,18 +4,7 @@
 
 # intercept only model
 if(model_type == "intercept"){
-  #data list
-  data_list <- list(
-    y=y
-  )
   
-  #constant list
-  constant_list <- list(
-    J=J,
-    nsite=nsite,
-    nseason=nseason,
-    m=site_m
-  ) 
   
   dat <- dat[grep("18|19", dat$Season),]
   
@@ -42,12 +31,25 @@ if(model_type == "intercept"){
   
   y[J==0] <- NA
   
+  #data list
+  data_list <- list(
+    y=y
+  )
+  
+  #constant list
+  constant_list <- list(
+    J=J,
+    nsite=nsite,
+    nseason=nseason,
+    m=site_m
+  ) 
+  
 }
 
 # covariate model 1 (urb)
 if(model_type == "covariate"){
   
-  dat <- dat[grep("18", dat$Season),]
+  dat <- dat[grep("18|19", dat$Season),]
   
   dat$Season <- factor(dat$Season, levels=unique(dat$Season))
   
