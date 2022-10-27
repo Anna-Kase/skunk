@@ -5,7 +5,7 @@ sf::sf_use_s2(
 )
 
 
-# our distance!
+# our distance
 l <- 2500
 
 # read in data
