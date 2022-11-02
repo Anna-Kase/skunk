@@ -1,15 +1,13 @@
 library(scales)
 
 # The One Script to Run Them All
-
-
 source("./R/parallel_data_prep.R") 
 source("./nimble/three_cov_model.R")
 
 
 library(parallel)
 
-set.seed(7)
+
 
 
 run_MCMC_allcode <- function(seed, data, cons) {
@@ -47,13 +45,21 @@ run_MCMC_allcode <- function(seed, data, cons) {
     data = data,
     inits = core_inits
   )
+  conf <- configureMCMC(
+    longest_shot, 
+    monitors = c(
+      "delta_beta",
+      "gamma_beta",
+      "phi_beta",
+      "psi_beta",
+      "rho_beta"), 
+    thin = 1
+  )
+  Rmcmc <- buildMCMC(conf)
+  compiledList <- compileNimble(longest_shot, Rmcmc)
+  Cmcmc <- compiledList$Rmcmc
   
-  CmyModel <- compileNimble(longest_shot)
-  
-  myMCMC <- buildMCMC(CmyModel)
-  CmyMCMC <- compileNimble(myMCMC)
-  
-  results <- runMCMC(CmyMCMC, niter = 40000, setSeed = seed, inits = core_inits)
+  results <- runMCMC(Cmcmc, niter = 100, setSeed = seed, inits = core_inits)
   
   return(results)
 

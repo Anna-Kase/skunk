@@ -135,7 +135,7 @@ y[J==0] <- NA
 
 covs <- read.csv("./data/site_covariates.csv")
 
-dm <- cbind(1, covs$urb, covs$water_dist, covs$open_dev)
+dm <- cbind(1, covs$urb, scale(covs$water_dist), scale(covs$open_dev))
 site_km <- site_dist
 units(site_km) <- "km"
 diag(site_km) <- 1
@@ -146,9 +146,9 @@ site_km_array[,,1:3] <- c(site_km, site_km, site_km)
 delta_array <- array(NA, dim=c(nsite,nsite,4))
 for(i in 1:nsite){
   delta_array[,,1] <- 1
-  delta_array[i,,2] <- covs$urb[i] - covs$urb
-  delta_array[i,,3] <- covs$water_dist[i] - covs$water_dist
-  delta_array[i,,4] <- covs$open_dev[i] - covs$open_dev
+  delta_array[i,,2] <-dm[i,2] - dm[,2]  
+  delta_array[i,,3] <- dm[i,3] - dm[,3]
+  delta_array[i,,4] <- dm[i,4] - dm[,4]
 }
 delta_array[,,2:4] <- delta_array[,,2:4]/site_km_array
 
@@ -172,6 +172,7 @@ constant_list <- list(
   ncovar_rho = ncol(dm),
   ncovar_gamma = ncol(dm),
   ncovar_phi = ncol(dm),
-  ncovar_delta = dim(delta_array)[3]
+  ncovar_delta = dim(delta_array)[3],
+  delta_array = delta_array
 ) 
 
