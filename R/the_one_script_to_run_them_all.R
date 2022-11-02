@@ -59,7 +59,7 @@ run_MCMC_allcode <- function(seed, data, cons) {
   compiledList <- compileNimble(longest_shot, Rmcmc)
   Cmcmc <- compiledList$Rmcmc
   
-  results <- runMCMC(Cmcmc, niter = 100, setSeed = seed, inits = core_inits)
+  results <- runMCMC(Cmcmc, niter = 10000, setSeed = seed, inits = core_inits)
   
   return(results)
 
