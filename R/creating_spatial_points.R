@@ -4,7 +4,7 @@
 
 
 site_coords <- read.csv(
-  "./data/full_capture_history.csv"
+  "./data/complete_data.csv"
 )
 
 #unique sites

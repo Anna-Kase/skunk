@@ -1,14 +1,14 @@
 
 # Creating a distance to stream covariate
-library(dplyr)
-library(sf)
+# library(dplyr)
+# library(sf)
 
 # source spatial points file
-source("./R/creating_spatial_points.R")
+#source("./R/creating_spatial_points.R")
 
 
 # Dowload data from:
- browseURL("https://clearinghouse.isgs.illinois.edu/data/hydrology/streams-and-shorelines")
+# browseURL("https://clearinghouse.isgs.illinois.edu/data/hydrology/streams-and-shorelines")
 # load water data
 
 water_path <- "../../GIS/water"
@@ -117,21 +117,3 @@ if(!"water_dist" %in% colnames(my_covariates)){
     row.names = FALSE
   )
 }
-
-# add water dist onto here
-sites$dist <- dist_df$water_dist
-
-#Create a function to generate a continuous color palette
-rbPal <- colorRampPalette(
-  c('blue','red')
-)
-
-#This adds a column of color values
-# based on the y values
-sites$col <- rbPal(100)[as.numeric(cut(sites$dist,breaks = 100))]
-
-plot(small_water$geometry)
-plot(sites$geometry, pch = 20, col = sites$col, cex=2, add=TRUE)
-
-
-
