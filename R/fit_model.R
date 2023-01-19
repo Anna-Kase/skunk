@@ -29,6 +29,12 @@ MCMCvis::MCMCsummary(
   digits=2
 )
 
+
+#saveRDS(long_shot, "../intercept_only.rds")
+
+
+
+
 # covariate model
 model_type <- "covariate"
 source("./R/create_m_n.R") 
