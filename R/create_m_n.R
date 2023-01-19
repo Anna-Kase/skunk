@@ -95,6 +95,7 @@ for(i in 1:nrow(site_dist)){
   m[i,1:n[i]] <- m_list[[i]]
 }
 
+
 # change m so that can accommodate sites with no neighbors
 
 site_m <- site_dist

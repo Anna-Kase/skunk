@@ -7,19 +7,20 @@ library(MCMCvis)
 
 sf::sf_use_s2(FALSE)
 
-# intercept only model
+source("./R/create_m_n.R")
+source("./R/init_functions.R")
 
+# intercept only model
 model_type <- "intercept"
-source("./R/create_m_n.R") 
 source("./nimble/intercept_only.R")
 source("./R/prep_data.R")
 
-nimbleOptions(verbose=FALSE)
 long_shot <- nimble::nimbleMCMC(
   code=my_model,
   constants = constant_list,
   data = data_list,
-  monitors = c("psi", "rho", "d", "gamma", "phi")
+  monitors = c("psi", "rho", "delta", "gamma", "phi"),
+  inits = intercept_inits()
 )
 
 
@@ -27,6 +28,12 @@ MCMCvis::MCMCsummary(
   long_shot,
   digits=2
 )
+
+
+#saveRDS(long_shot, "../intercept_only.rds")
+
+
+
 
 # covariate model
 model_type <- "covariate"

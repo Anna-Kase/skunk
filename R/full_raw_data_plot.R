@@ -1,5 +1,4 @@
 
-# Read in data
 new_skunks <- readxl::read_excel("./data/working_full_skunk_data.xlsx")
 
 
@@ -49,7 +48,9 @@ small_water <- sf::st_crop(water_data, xmin=395087, xmax=456196.7,
                            ymin=4604022, ymax=4678480)
 
 
-# Create separate objects for each year of data
+
+
+
 move_map_10 <- sites[sites$Season %in% c("AP10", "JU10","OC10"),]
 move_map_11 <- sites[sites$Season %in% c("JA11", "AP11", "JU11","OC11"),]
 move_map_12 <- sites[sites$Season %in% c("JA12", "AP12", "JU12","OC12"),]
@@ -63,8 +64,7 @@ move_map_19 <- sites[sites$Season %in% c("JA19", "AP19", "JU19","OC19"),]
 move_map_20 <- sites[sites$Season %in% c("JA20", "AP20", "JU20","OC20"),]
 move_map_21 <- sites[sites$Season %in% c("JA21", "AP21", "JU21","OC21"),]
 
-# Separate out species detections and non-detections for each year
-# so the detections can be plotted on top of the non-detections
+
 move_map_10_obs <- move_map_10[move_map_10$Y > 0,]
 move_map_10_not <- move_map_10[move_map_10$Y <= 0,]
 
@@ -102,11 +102,12 @@ move_map_21_obs <- move_map_21[move_map_21$Y > 0,]
 move_map_21_not <- move_map_21[move_map_21$Y <= 0,]
 
 
+
 # Make the plot
 line = -2
 cex = 2
 adj  = 0.25
-par(mfrow = c(3, 4))
+par(mfrow = c(4, 3))
 par(cex=0.6)
 par(bg="white")
 
