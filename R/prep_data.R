@@ -4,7 +4,7 @@
 
 # intercept only model
 if(model_type == "intercept"){
-  
+
   
   dat <- dat[grep("18|19", dat$Season),]
   
