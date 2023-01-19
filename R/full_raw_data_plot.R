@@ -1,5 +1,4 @@
 
-
 new_skunks <- readxl::read_excel("./data/working_full_skunk_data.xlsx")
 
 
@@ -47,6 +46,8 @@ water_data <- sf::st_transform(
 # sourced in
 small_water <- sf::st_crop(water_data, xmin=395087, xmax=456196.7,
                            ymin=4604022, ymax=4678480)
+
+
 
 
 
@@ -102,6 +103,7 @@ move_map_21_not <- move_map_21[move_map_21$Y <= 0,]
 
 
 
+# Make the plot
 line = -2
 cex = 2
 adj  = 0.25

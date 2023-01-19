@@ -31,7 +31,9 @@ nseason <- constant_list$nseason
 
 # Create empty arrays to house calculated z values and the probabilities needed
 # to calculate those z values (aka indicator function for species presence)
-z <- z_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason))
+
+z <- z_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason+4))
+
 
 
 # Calculating z probabilities for the first season of data (t=1)
@@ -62,9 +64,7 @@ z[,,1] <- rbinom(
 
 # Fill in delta_bar (aka neighborhood colonization probabilities) at t=1
 
-# First create zm matrix to hold site neighbors for the first season of 
-# data
-zm <- z[,,1] %*% constant_list$m
+
 
 # Create empty delta_bar and zeta arrays
 delta_bar <- zeta <- array(dim=dim(z_prob))
@@ -85,12 +85,22 @@ for(i in 1:nsite){
     constant_list$m[i, 1:nsite],
     FUN = "*"
   )
+
+  # These lines creates the tmp_zeta object that holds the total number of
+  # neighbors for each site. Then it creates the zeta array which holds
+  # the number of neighbors but as a numeric variable rather than a factor,
+  # then we work through multiplying our zm matrix (aka the nearby neighbors)
+  # by the log(1-d_vec) (our nearby colonization covariate), then summing
+  # those probabilities, convert the log probabilities back to 
+  # numeric probabilities, and then fill those into the delta_bar array
+
   # the last lines in this loop are all to fill in the delta_bar array.
   # that is, we are calculating neighborhood colonization probabilities
   # using a tmp_zeta object using the means (calculated with rowSums) from zm
   # which would make those values the mean of species presence accounting for
   # species presence in the neighborhood, and plugging those into the original
   # equation: 1 - exp(z' * log(1-d_vec))
+
   tmp_zeta <- rowSums(zm)
   zeta[,i,1] <- as.numeric(tmp_zeta>0)
   zm <- zm * log(1 - d_vec)
@@ -153,7 +163,9 @@ for(t in 2:nseason){
 # Make psi_prob aka forecast probabilities (f[i,t]) for Brier Scores
 
 # Create empty matrix
-psi_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason))
+
+psi_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason+4))
+
 
 # Fill in psi values at t = 1 (just the straight psi values from the posterior)
 for(i in 1:nsite){
@@ -183,6 +195,55 @@ for(t in 2:nseason){
 BS <- (psi_prob - z)^2
 mean(BS)
 
+
+# hard code future data collection as median number of days
+#  sampled n(i.e., 28).
+pb <- txtProgressBar(min = nseason+1,max = nseason+4)
+for(t in (nseason+1):(nseason+4)){
+  setTxtProgressBar(pb, t)
+  for(i in 1:nsite){
+      num <- (z[,i,t-1] * mc$phi) + 
+        ((1-z[,i,t-1]) * zeta[,i,t-1] * delta_bar[,i,t-1]) +
+        ((1-z[,i,t-1]) * (1-zeta[,i,t-1])*mc$gamma)
+      dnm1 <- 1 - num
+      # add rho
+      num <- num * (1 - mc$rho)^median(constant_list$J)
+      z_prob[,i,t] <- num / (num + dnm1)
+    # Then following the calculation structure from the first season above, 
+    # we fill in the z matrix using the z probabilities we just calculated
+  }
+  z[,,t] <- rbinom(
+    prod(dim(z)[1:2]),
+    size = 1,
+    prob = z_prob[,,t]
+  )
+  # Then create the zm matrix with the neighborhood colonization to 
+  # use to calculate delta_bar for all of the seasons
+  for(i in 1:nsite){
+    zm <- sweep(
+      z[,1:nsite,t],
+      2,
+      constant_list$m[i, 1:nsite],
+      FUN = "*"
+    )
+    # Now calculate and fill in delta_bar for all of the seasons
+    tmp_zeta <- rowSums(zm)
+    zeta[,i,t] <- as.numeric(tmp_zeta>0)
+    zm <- zm * log(1 - d_vec)
+    zm <- rowSums(zm)
+    zm <- 1 - exp(zm)
+    delta_bar[,i,t] <- zm
+  }
+}
+
+for(t in (nseason+1):(nseason+4)){
+  for(i in 1:nsite){
+    num <- (z[,i,t-1] * mc$phi) + 
+      ((1-z[,i,t-1]) * zeta[,i,t-1] * delta_bar[,i,t-1]) +
+      ((1-z[,i,t-1]) * (1-zeta[,i,t-1])*mc$gamma)
+    psi_prob[,i,t] <- num
+  }
+}
 
 
 
