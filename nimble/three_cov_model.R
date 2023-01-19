@@ -71,10 +71,17 @@ three_cov_model <- nimble::nimbleCode({
   }
   for(i in 1:nsite){ 
     for(ii in 1:nsite){
+
+      logit(d_vec[i, ii]) <-inprod(
+        delta_beta[1:ncovar_delta],
+        delta_array[i,ii,1:ncovar_delta]
+      )
+
       logit(d_vec[i, ii]) <- delta_beta[1] + 
         (delta_beta[2] * X_delta1[i,ii]) +
         (delta_beta[3] * X_delta2[i,ii]) +
         (delta_beta[4] * X_delta3[i,ii])
+
     }
   }
 })

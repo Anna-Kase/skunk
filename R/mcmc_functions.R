@@ -1,5 +1,7 @@
 
+
 #MCMC Functions
+
 
 
 split_mcmc <- function(x){
@@ -72,4 +74,6 @@ split_mcmc <- function(x){
     
   }
   return(result_list)
+
 }
+
