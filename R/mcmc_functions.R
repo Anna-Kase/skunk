@@ -1,3 +1,9 @@
+
+
+#MCMC Functions
+
+
+
 split_mcmc <- function(x){
   # get parameter names
   pars <- colnames(x)
@@ -68,4 +74,6 @@ split_mcmc <- function(x){
     
   }
   return(result_list)
+
 }
+
