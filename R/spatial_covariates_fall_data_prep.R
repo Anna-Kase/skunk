@@ -1,7 +1,7 @@
 
 
 
-# Skunk Data Prep
+# Spatial covariates with fall term data prep
 
 # read in data
 complete <- read.csv("./data/complete_data.csv")
@@ -46,6 +46,77 @@ diag(site_dist) <- -1
 # take out the 2021 data to use as hold out/validation data
 complete <- complete %>% 
   dplyr::filter(!Season %in% c("JA21", "AP21", "JU21", "OC21"))
+
+
+# NEW STUFF
+
+# get all the unique years
+unq_years <- unique(
+  substr(complete$Season, 3, 4)
+)
+
+
+# and the unique seasons, just hard coding these
+unq_seasons <- c("JA", "AP", "JU", "OC")
+
+
+# combine
+my_seasons <- expand.grid(
+  unq_seasons, unq_years
+)
+# paste them together
+my_seasons <- apply(
+  my_seasons,
+  1,
+  paste0,
+  collapse = ""
+)
+# drop JA14
+my_seasons <- my_seasons[-1]
+
+# get all the unique sites
+unq_sites <- unique(complete$Site)
+
+
+# combine seasons and sites
+
+full_history <- expand.grid(
+  Season = my_seasons,
+  Site = unq_sites
+)
+full_history$Season <- factor(
+  full_history$Season,
+  levels = my_seasons
+)
+full_history <- full_history[
+  order(full_history$Season, full_history$Site),
+]
+
+# get just the unique sites
+site_locs <- dplyr::distinct(
+  complete[, c("Site", "geometry")]
+)
+
+# join on site locations
+tmp_complete <- dplyr::inner_join(
+  full_history,
+  site_locs,
+  by = "Site"
+)
+
+# join to complete
+complete <- dplyr::left_join(
+  full_history,
+  complete[,c("Season", "Site", "Crs", "Y", "J")],
+  by = c("Season", "Site")
+)
+
+# turn NA to 0's
+complete$J[is.na(complete$J)] <- 0
+complete$Y[is.na(complete$Y)] <- 0
+complete$Crs <- 4326
+
+# BACK TO OLD STUFF
 
 
 # Create m matrix
@@ -107,9 +178,13 @@ diag(site_m) <- 0
 
 
 
-# Data and Constant lists and covariates
+# Data and Constant lists and covariates 
 
-complete$Season <- factor(complete$Season, levels=unique(complete$Season))
+# SOME SMALL CHANGES HERE - MOSTLY FORMATTING
+
+complete$Season <- factor(
+  complete$Season, 
+  levels = my_seasons)
 complete <- complete[order(complete$Season, complete$Site), ]
 nsite <- dplyr::n_distinct(complete$Site)
 nseason <- dplyr::n_distinct(complete$Season)
@@ -141,9 +216,11 @@ y[J==0] <- NA
 # the season of interest to account for that lag. In our case, the season 
 # of interest is the fall, so we turn on the effect during the summer.
 
+# GOING BACK TO USING OCTOBER AS THE FALL TURN ON POINT
+
 my_seasons <- unique(complete$Season)
 season_vec <- rep(0, length(my_seasons))
-season_vec[grep("JU", my_seasons)] <- 1
+season_vec[grep("OC", my_seasons)] <- 1
 
 
 
@@ -165,8 +242,20 @@ site_km <- site_dist
 units(site_km) <- "km"
 diag(site_km) <- 1
 
+# ADDING A BIT HERE
+site_km <- apply(
+  site_km,
+  2,
+  function(x) as.numeric(x)
+)
+
 site_km_array <- array(NA,dim=c(nsite,nsite,3))
-site_km_array[,,1:3] <- c(site_km, site_km, site_km) 
+
+for(i in 1:3){
+  site_km_array[,,i] <- site_km
+}
+
+ 
 
 delta_array <- array(NA, dim=c(nsite,nsite,4))
 for(i in 1:nsite){
@@ -199,8 +288,7 @@ constant_list <- list(
   ncovar_phi = ncol(dm),
   ncovar_delta = dim(delta_array)[3],
   delta_array = delta_array,
-  delta_fall = ncol(dm),
-  gamma_fall = ncol(dm)
+  season_vec = season_vec
 ) 
 
 

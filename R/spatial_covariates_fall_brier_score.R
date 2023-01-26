@@ -1,9 +1,9 @@
 
 
-
+# Spatial covariates with fall term brier scores
 
 # read in saved RDS file if not already loaded
-#chain_output <- readRDS("../skunk/spatial_covariates_fall.RDS")
+#chain_output <- readRDS("../skunk_rds/spatial_covariates_fall.RDS")
 
 chain_output <- do.call("rbind", chain_output)
 
@@ -31,7 +31,7 @@ nseason <- constant_list$nseason
 # Create empty arrays to house calculated z values and the probabilities needed
 # to calculate those z values (aka indicator function for species presence)
 z <- z_prob <- array(NA, dim=c(length(my_samples2), constant_list$nsite, 
-                               constant_list$nseason+4))
+                               constant_list$nseason))
 
 
 # Calculating z probabilities for the first season of data (t=1)
@@ -167,7 +167,7 @@ for(t in 2:nseason){
 
 # Create empty matrix
 psi_prob <- array(NA, dim=c(length(my_samples2), 
-                            constant_list$nsite, constant_list$nseason+4))
+                            constant_list$nsite, constant_list$nseason))
 
 # Fill in psi values at t = 1 (just the straight psi values from the posterior)
 for(i in 1:nsite){
@@ -227,7 +227,7 @@ for(t in 2:5){
 # based on observed species presence, presence in the neighborhood, and
 # colonization from other) and the z array (species occurrence)
 BS <- (psi_prob - z)^2
-mean(BS)
+mean(BS[,,1])
 
 
 
@@ -273,11 +273,7 @@ mean(fBS)
 
 
 
-
-
-
-
-
+# out of sample score
 
 # forecasted z matrix
 fz <- array(NA, dim=c(length(my_samples2), nsite, 5))

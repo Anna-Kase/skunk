@@ -5,6 +5,8 @@
 library(scales)
 library(parallel)
 library(dplyr)
+library(nimble)
+library(MCMCvis)
 
 source("./R/spatial_covariates_fall_data_prep.R") 
 source("./nimble/spatial_covariates_fall_model.R")
@@ -28,8 +30,8 @@ run_MCMC_allcode <- function(seed, data, cons) {
       phi_beta = rnorm(cons$ncovar_phi),
       psi_beta = rnorm(cons$ncovar_psi),
       rho_beta = rnorm(cons$ncovar_rho),
-      delta_fall = rnorm(cons$delta_fall),
-      gamma_fall = rnorm(cons$gamma_fall),
+      delta_fall = rnorm(1),
+      gamma_fall = rnorm(1),
       z = matrix(
         1,
         ncol = cons$nseason,
@@ -57,9 +59,8 @@ run_MCMC_allcode <- function(seed, data, cons) {
   myMCMC <- buildMCMC(CmyModel)
   CmyMCMC <- compileNimble(myMCMC)
   
-  results <- runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 4,
-                     setSeed = seed, inits = core_inits,
-                     progressBar = getNimbleOption("MCMCprogressBar"))
+  results <- runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 1,
+                     setSeed = seed, inits = core_inits)
   
   return(results)
   

@@ -31,7 +31,9 @@ nseason <- constant_list$nseason
 
 # Create empty arrays to house calculated z values and the probabilities needed
 # to calculate those z values (aka indicator function for species presence)
-z <- z_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason+4))
+z <- z_prob <- array(NA, dim=c(length(my_samples), 
+                               constant_list$nsite, 
+                               constant_list$nseason))
 
 
 # Calculating z probabilities for the first season of data (t=1)
