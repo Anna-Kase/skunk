@@ -225,21 +225,10 @@ season_vec[grep("OC", my_seasons)] <- 1
 
 
 
-# NEED TO AUTOMATE THIS BUT IT'S TAKING TOO MUCH TIME RN
-
-# Making year term to include in the model 
-# my_years <- unique(complete$Season)
-# year_vec <- rep(0, length(my_years))
-# year_vec[grep()]
-
-year_vec <- as.factor(c("2014", "2014", "2014",
-              "2015", "2015", "2015", "2015",
-              "2016", "2016", "2016", "2016",
-              "2017", "2017", "2017", "2017",
-              "2018", "2018", "2018", "2018",
-              "2019", "2019", "2019", "2019",
-              "2020", "2020", "2020", "2020"))
-
+# Year just needs to be a numeric vector, not a factor. We also
+#  want it to switch during the fall. Easiest way to spin this
+#  up is to take the cumulative sum of season_vec and then add 1.
+year_vec <- cumsum(season_vec) + 1
 
 # Covariate scripts - can be sourced individually,
 # but one file is written that contains all three spatial
@@ -254,7 +243,22 @@ year_vec <- as.factor(c("2014", "2014", "2014",
 # read in the covariate data created by sourced code above
 covs <- read.csv("./data/site_covariates.csv")
 
+# intial design matrix, going to modify for gamma and delta
 dm <- cbind(1, covs$urb, scale(covs$water_dist), scale(covs$open_dev))
+
+dmt <- array(
+  NA,
+  dim = c(nrow(dm), ncol(dm)+2, nseason)
+)
+# scale year_vec
+year_vec <- scale(year_vec)
+for(i in 1:nseason){
+  dmt[,1:4,i] <- dm
+  dmt[,5,i] <- as.numeric(year_vec[i])
+  dmt[,6,i] <- covs$urb * as.numeric(year_vec[i])
+}
+
+
 site_km <- site_dist
 units(site_km) <- "km"
 diag(site_km) <- 1
@@ -266,27 +270,30 @@ site_km <- apply(
   function(x) as.numeric(x)
 )
 
-site_km_array <- array(NA,dim=c(nsite,nsite,3))
+site_km_array <- array(NA,dim=c(nsite,nsite,4))
 
-for(i in 1:3){
+for(i in 1:dim(site_km_array)[3]){
   site_km_array[,,i] <- site_km
 }
 
 
-
-delta_array <- array(NA, dim=c(nsite,nsite,4))
+# also needs to vary through time now. What is funny about this
+#  is that because these are differences the year term just
+#  drops out (we'll need to add it in a different way).
+delta_array <- array(NA, dim=c(nsite,nsite,5, nseason))
 for(i in 1:nsite){
-  delta_array[,,1] <- 1
-  delta_array[i,,2] <-dm[i,2] - dm[,2]  
-  delta_array[i,,3] <- dm[i,3] - dm[,3]
-  delta_array[i,,4] <- dm[i,4] - dm[,4]
+  for(j in 1:nseason){
+  delta_array[,,1,j] <- 1
+  delta_array[i,,2,j] <-dm[i,2] - dm[,2]  
+  delta_array[i,,3,j] <- dm[i,3] - dm[,3]
+  delta_array[i,,4,j] <- dm[i,4] - dm[,4]
+  delta_array[i,,5,j] <- dmt[i,6,j] - dmt[,6,j] 
+  }
 }
-delta_array[,,2:4] <- delta_array[,,2:4]/site_km_array
+for(j in 1:nseason){
+  delta_array[,,2:5,j] <- delta_array[,,2:5,j]/site_km_array
+}
 
-
-# isolate the "urb" covariate to use in the the urbanization tolerance
-# interaction
-urbless <- covs$urb
 
 
 #data list
@@ -302,17 +309,16 @@ constant_list <- list(
   m=site_m,
   X_psi = dm,
   X_rho = dm,
-  X_gamma = dm,
+  X_gamma = dmt,
   X_phi = dm,
   ncovar_psi = ncol(dm),
   ncovar_rho = ncol(dm),
-  ncovar_gamma = ncol(dm),
+  ncovar_gamma = dim(dmt)[2],
   ncovar_phi = ncol(dm),
   ncovar_delta = dim(delta_array)[3],
   delta_array = delta_array,
   season_vec = season_vec,
-  year_vec = year_vec,
-  urbless = urbless
+  year_vec = year_vec
 ) 
 
 

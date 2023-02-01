@@ -36,11 +36,8 @@ spatial_covariates_fall_urbless <- nimble::nimbleCode({
       )
       logit(gamma[i, t-1]) <- inprod(
         gamma_beta[1:ncovar_gamma],
-        X_gamma[i, 1:ncovar_gamma]
-      ) + (gamma_fall*season_vec[t]) +
-        (gamma_urbless*(inprod(
-          year_vec, urbless
-        )))
+        X_gamma[i, 1:ncovar_gamma,t]
+      ) + (gamma_fall*season_vec[t])
       lin_pred[i, t-1] <- ( 
         (z[i, t-1] * phi[i, t-1]) + 
           ((1-z[i, t-1])*zeta[i, t-1]*delta_bar[i, t-1]) + 
@@ -79,16 +76,13 @@ spatial_covariates_fall_urbless <- nimble::nimbleCode({
       for(t in 1:nseason){
         logit(d_vec[i, ii, t]) <-inprod(
           delta_beta[1:ncovar_delta],
-          delta_array[i,ii,1:ncovar_delta]
+          delta_array[i,ii,1:ncovar_delta,t]
         ) + (delta_fall*season_vec[t]) +
-          (delta_urbless*(inprod(
-            year_vec, urbless
-          )))
+          delta_year * year_vec[t]
       }
     }
   }
   delta_fall ~ dlogis(0,1) 
   gamma_fall ~ dlogis(0,1)
-  delta_urbless ~ dlogis(0,1)
-  gamma_urbless ~ dlogis(0,1)
+  delta_year ~ dlogis(0,1)
 })
