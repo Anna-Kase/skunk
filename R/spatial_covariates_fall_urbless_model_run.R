@@ -104,6 +104,7 @@ for(i in 1:npar){
     )
   )
   
+  
   plot(
     scfu[[1]][,i],
     ylim = my_range,

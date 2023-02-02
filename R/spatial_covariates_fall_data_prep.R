@@ -255,7 +255,7 @@ for(i in 1:3){
   site_km_array[,,i] <- site_km
 }
 
- 
+
 
 delta_array <- array(NA, dim=c(nsite,nsite,4))
 for(i in 1:nsite){
