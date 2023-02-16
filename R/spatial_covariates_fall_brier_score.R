@@ -84,8 +84,8 @@ for(i in 1:nsite){
   for(ti in 1:nseason){
     d_vec[,i,,ti] <- (
       mc$delta_beta %*%
-        t(constant_list$delta_array[i,,])
-    ) + as.numeric(mc$delta_fall) * constant_list$season_vec[ti]
+      t(constant_list$delta_array[i,,])) + 
+      as.numeric(mc$delta_fall) * constant_list$season_vec[ti]
   }
 }
 d_vec <- plogis(d_vec)
@@ -333,4 +333,4 @@ for(i in 1:nsite){
 }
 # total accuracy
 mean(brier_post, na.rm = TRUE)
-hist(brier_post)
+
