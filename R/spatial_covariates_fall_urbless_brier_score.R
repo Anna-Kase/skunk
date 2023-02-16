@@ -337,4 +337,4 @@ for(i in 1:nsite){
 # total accuracy
 mean(brier_post, na.rm = TRUE)
 
-
+#0.6487994

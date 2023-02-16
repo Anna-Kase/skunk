@@ -83,7 +83,7 @@ stopCluster(my_cluster)
 saveRDS(chain_output, file = "../../GitHub/spatial_covariates_fall.RDS")
 
 
-scf <- readRDS("../../GitHub/spatial_covariates_fall.RDS")
+scf <- readRDS("../../GitHub/skunk_rds/spatial_covariates_fall2.RDS")
 
 head(scf[[1]])
 
