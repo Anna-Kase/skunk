@@ -1,9 +1,11 @@
 
+library(nimble)
+library(dplyr)
 
 # Spatial covariates with fall term brier scores
 
 # read in saved RDS file if not already loaded
-chain_output <- readRDS("../skunk_rds/spatial_covariates_fall2.RDS")
+chain_output <- readRDS("./skunk_rds/spatial_covariates_fall2.RDS")
 
 chain_output <- do.call("rbind", chain_output)
 
@@ -27,12 +29,16 @@ source("./R/spatial_covariates_fall_data_prep.R")
 nsite <- constant_list$nsite
 nseason <- constant_list$nseason
 
-
 # Create empty arrays to house calculated z values and the probabilities needed
 # to calculate those z values (aka indicator function for species presence)
-z <- z_prob <- array(NA, dim=c(length(my_samples2), constant_list$nsite, 
-                               constant_list$nseason))
-
+z <- z_prob <- array(
+  NA, 
+  dim=c(
+    length(my_samples2),
+    constant_list$nsite, 
+    constant_list$nseason
+  )
+)
 
 # Calculating z probabilities for the first season of data (t=1)
 # and store them in z_prob
@@ -76,8 +82,10 @@ delta_bar <- zeta <- array(dim=dim(z_prob))
 d_vec <- array(NA, dim=c(length(my_samples2), nsite, nsite, nseason))
 for(i in 1:nsite){
   for(ti in 1:nseason){
-    d_vec[,i,,ti] <- (mc$delta_beta %*% t(constant_list$delta_array[i,,])) +
-                       as.numeric(mc$delta_fall) * constant_list$season_vec[ti]
+    d_vec[,i,,ti] <- (
+      mc$delta_beta %*%
+        t(constant_list$delta_array[i,,])
+    ) + as.numeric(mc$delta_fall) * constant_list$season_vec[ti]
   }
 }
 d_vec <- plogis(d_vec)
@@ -104,7 +112,7 @@ for(i in 1:nsite){
   # numeric probabilities, and then fill those into the delta_bar array
   tmp_zeta <- rowSums(zm)
   zeta[,i,1] <- as.numeric(tmp_zeta>0)
-  zm <- zm * log(1 - d_vec[,i,])
+  zm <- zm * log(1 - d_vec[,i,,1])
   zm <- rowSums(zm)
   zm <- 1 - exp(zm)
   delta_bar[,i,1] <- zm
@@ -156,28 +164,24 @@ for(t in 2:nseason){
     # Now calculate and fill in delta_bar for all of the seasons
     tmp_zeta <- rowSums(zm)
     zeta[,i,t] <- as.numeric(tmp_zeta>0)
-    zm <- zm * log(1 - d_vec[,i,])
+    zm <- zm * log(1 - d_vec[,i,,t])
     zm <- rowSums(zm)
     zm <- 1 - exp(zm)
     delta_bar[,i,t] <- zm
   }
 }
 
-
-
-
-
 # Make psi_prob aka forecast probabilities (f[i,t]) for Brier Scores
 
 # Create empty matrix
-psi_prob <- array(NA, dim=c(length(my_samples2), 
-                            constant_list$nsite, constant_list$nseason))
-
-# Fill in psi values at t = 1 (just the straight psi values from the posterior)
-for(i in 1:nsite){
-  psi <- plogis(mc$psi_beta %*% constant_list$X_psi[i,])
-  psi_prob[,i,1] <- psi
-}
+fpsi_prob <- array(
+  NA, 
+  dim=c(
+    length(my_samples2), 
+    constant_list$nsite,
+    5
+  )
+)
 
 # Now fill in the the psi_prob array for the rest of the seasons
 # Here we do not hard code anything, rather if the species was not present
@@ -194,6 +198,10 @@ fzeta[,,1] <- zeta[,,nseason]
 fdelta_bar <- array(NA, dim=c(length(my_samples2), nsite, 5))
 fdelta_bar[,,1] <- delta_bar[,,nseason]
 
+rm(delta_bar)
+rm(d_vec)
+gc()
+
 fd_vec <- array(NA, dim=c(length(my_samples2), nsite, nsite, 5))
 for(i in 1:nsite){
   for(ti in 1:5){
@@ -202,39 +210,41 @@ for(i in 1:nsite){
   }
 }
 fd_vec <- plogis(fd_vec)
-# # find number of detection days nsite, 5 matrix - add to line 193
-# for(t in 2:5){
-#   for(i in 1:nsite){
-#     phi <- plogis(mc$phi_beta %*% constant_list$X_phi[i,])
-#     gamma <- plogis(mc$gamma_beta %*% constant_list$X_gamma[i,] +
-#                       mc$gamma_fall * c(0,0,0,0,1)[t])
-#     rho <- plogis(mc$rho_beta %*% constant_list$X_rho[i,])
-#     
-#     num <- (fz[,i,t-1] * phi) + 
-#       ((1-fz[,i,t-1]) * fzeta[,i,t-1] * fdelta_bar[,i,t-1]) +
-#       ((1-fz[,i,t-1]) * (1-fzeta[,i,t-1])*gamma)
-#     psi_prob[,i,t] <- num * (1-(1-rho)^28)
-#     
-#   }
-#   
-#   
-#   for(i in 1:nsite){
-#     zm <- sweep(
-#       z[,1:nsite,t],
-#       2,
-#       constant_list$m[i, 1:nsite],
-#       FUN = "*"
-#     )
-#     # Now calculate and fill in delta_bar for all of the seasons
-#     tmp_zeta <- rowSums(zm)
-#     zeta[,i,t] <- as.numeric(tmp_zeta>0)
-#     zm <- zm * log(1 - fd_vec[,i,,t])
-#     zm <- rowSums(zm)
-#     zm <- 1 - exp(zm)
-#     fdelta_bar[,i,t] <- zm
-#   }
-# }
-# 
+# forecast the latent probability that the species is present
+#  and then sample from that.
+for(t in 2:5){
+  for(i in 1:nsite){
+    phi <- plogis(mc$phi_beta %*% constant_list$X_phi[i,])
+    gamma <- plogis(mc$gamma_beta %*% constant_list$X_gamma[i,] +
+                      mc$gamma_fall * c(0,0,0,0,1)[t])
+    fpsi_prob[,i,t] <- (fz[,i,t-1] * phi) +
+      ((1-fz[,i,t-1]) * fzeta[,i,t-1] * fdelta_bar[,i,t-1]) +
+      ((1-fz[,i,t-1]) * (1-fzeta[,i,t-1])*gamma)
+  }
+  fz[,,t] <- rbinom(
+    prod(
+      dim(fpsi_prob)[1:2]
+    ),
+    1,
+    prob = fpsi_prob[,,t]
+  )
+  for(i in 1:nsite){
+    zm <- sweep(
+      z[,1:nsite,t],
+      2,
+      constant_list$m[i, 1:nsite],
+      FUN = "*"
+    )
+    # Now calculate and fill in delta_bar for all of the seasons
+    tmp_zeta <- rowSums(zm)
+    fzeta[,i,t] <- as.numeric(tmp_zeta>0)
+    zm <- zm * log(1 - fd_vec[,i,,t])
+    zm <- rowSums(zm)
+    zm <- 1 - exp(zm)
+    fdelta_bar[,i,t] <- zm
+  }
+}
+
 
 # Calculate Brier Scores based on the difference of mean squares of the
 # psi_prob array (the occurrence probability
@@ -242,36 +252,6 @@ fd_vec <- plogis(fd_vec)
 # colonization from other) and the z array (species occurrence)
 # BS <- (psi_prob - z)^2
 # mean(BS[,,1])
-
-
-
-# forecasting z
-
-# fill in forecasted d_vec
-fd_vec <- array(NA, dim=c(length(my_samples2), nsite, nsite, 5))
-for(i in 1:nsite){
-  for(ti in 1:5){
-    fd_vec[,i,,ti] <- (mc$delta_beta %*% t(constant_list$delta_array[i,,])) +
-      as.numeric(mc$delta_fall) * c(0,0,0,0,1)[ti]
-  }
-}
-fd_vec <- plogis(fd_vec)
-
-# forecasted z matrix
-fz <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fz[,,1] <- z[,,nseason]
-
-# forecasted z_prob 
-fz_prob <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fz_prob[,,1] <- z_prob[,,nseason]
-
-# forecasted site neighbors
-fzeta <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fzeta[,,1] <- zeta[,,nseason]
-
-# forecasted zm*(log(1-d_vec))
-fdelta_bar <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fdelta_bar[,,1] <- delta_bar[,,nseason]
 
 # forecasted J
 
@@ -309,113 +289,17 @@ fj <- matrix(
 
 # make zeroes mean number of days sampled from
 # sites where J did not equal zero
-fj[fj==0] <- floor(mean(fj[fj>0]))
-
-
-for(t in 2:5){
-  for(i in 1:nsite){
-    phi <- plogis(mc$phi_beta %*% constant_list$X_phi[i,])
-    gamma <- plogis(mc$gamma_beta %*% constant_list$X_gamma[i,] +
-                          mc$gamma_fall * c(0,0,0,0,1)[t])
-    rho <- plogis(mc$rho_beta %*% constant_list$X_rho[i,])
-    num <- (fz[,i,t-1] * phi) +
-      ((1-fz[,i,t-1]) * fzeta[,i,t-1] * fdelta_bar[,i,t-1]) +
-      ((1-fz[,i,t-1]) * (1-fzeta[,i,t-1])*gamma)
-    dnm1 <- 1 - num
-    num <- num * (1 - rho)^fj[,t-1]
-    fz_prob[,i,t] <- num/ (num+dnm1)
-  }
-  # now simulating the forecasted z matrix
-  fz[,,t] <- rbinom(
-    prod(dim(fz)[1:2]),
-    size = 1,
-    prob = fz_prob[,,t]
-  )
-  for(i in 1:nsite){
-        zm <- sweep(
-          fz[,1:nsite,t],
-          2,
-          constant_list$m[i, 1:nsite],
-          FUN = "*"
-        )
-        # Now calculate and fill in delta_bar for all of the seasons
-        tmp_zeta <- rowSums(zm)
-        fzeta[,i,t] <- as.numeric(tmp_zeta>0)
-        zm <- zm * log(1 - fd_vec[,i,,t])
-        zm <- rowSums(zm)
-        zm <- 1 - exp(zm)
-        fdelta_bar[,i,t] <- zm
-      }
-}
-
-# calculate forecasted brier score
-# fBS <- (fz_prob - fz)^2
-# mean(fBS)
-
-
-
-# out of sample score
-
-# # forecasted z matrix
-# fz <- array(NA, dim=c(length(my_samples2), nsite, 5))
-# fz[,,1] <- z[,,nseason]
-# 
-# # forecasted z_prob 
-# fz_prob <- array(NA, dim=c(length(my_samples2), nsite, 4))
-# 
-# # forecasted site neighbors
-# fzeta <- array(NA, dim=c(length(my_samples2), nsite, 5))
-# fzeta[,,1] <- zeta[,,nseason]
-# 
-# # forecasted zm*(log(1-d_vec))
-# fdelta_bar <- array(NA, dim=c(length(my_samples2), nsite, 5))
-# fdelta_bar[,,1] <- delta_bar[,,nseason]
-# 
-# 
-# 
-# for(t in 2:5){
-#   for(i in 1:nsite){
-#     fz_prob[,i,t-1] <- (fz[,i,1] * phi) +
-#       ((1-fz[,i,1]) * fzeta[,i,1] * fdelta_bar[,i,1]) +
-#       ((1-fz[,i,1]) * (1-fzeta[,i,1])*gamma)
-#     
-#   }
-#   # now simulating the forecasted z matrix
-#   fz[,,t] <- rbinom(
-#     prod(dim(fz)[1:2]),
-#     size = 1,
-#     prob = fz_prob[,,t-1]
-#   )
-# }
+fj[fj==0] <- NA
 
 # drop the 'known' season at this point so we are just
 #  left with the forecasts.
 fz <- fz[,,-1]
+fpsi_prob <- fpsi_prob[,,-1]
 # This generates fz. From there, we need to get
 # 1. The detection / non-detection data we held out.
 # 2. The number of days each camera trap was operational
 #      on those deployments.
 # 3. The detection probability for each site
-
-# for 1, let's call it fy. for 2, I'll call it fj.
-
-
-# fyd <- read.csv("./data/complete_data.csv")
-# fyd <- fyd[grep("21", fyd$Season),]
-# fyd$Season <- factor(fyd$Season, levels = unique(fyd$Season))
-# fyd <- fyd[order(fyd$Season, fyd$Site), ]
-# fynsite <- n_distinct(fyd$Site)
-# fynseason <- n_distinct(fyd$Season)
-# 
-# fy <- matrix(
-#   fyd$Y,
-#   ncol=fynseason,
-#   nrow=fynsite
-# )
-# 
-# # fy should be a matrix that is nsite by 4.
-# # make binary
-# fy[fy>0] <- 1
 
 # get number of mcmc samples
 nsim <- dim(fz)[1]
@@ -424,20 +308,9 @@ brier_post <- array(
   dim = c(
     length(my_samples2),
     fynsite,
-    4
+    ncol(fj)
   )
 )
-
-
-
-# fj <- matrix(
-#   fyd$J,
-#   ncol=fynseason,
-#   nrow=fynsite
-# )
-# 
-# fj[fj==0] <- NA
-
 
 for(i in 1:nsite){
   rho <- plogis(mc$rho_beta %*% constant_list$X_rho[i,])
@@ -447,10 +320,10 @@ for(i in 1:nsite){
       next
     }
     # species observed
-    sp_det <- fz_prob[,i,t] * (1 - (1 - rho)^fj[i,t])
+    sp_det <- fpsi_prob[,i,t] * (1 - (1 - rho)^fj[i,t])
     # species not observed
-    sp_not_det <- (1 - fz_prob[,i,t]) +
-      fz_prob[,i,t] * (1 - rho)^fj[i,t]
+    sp_not_det <- (1 - fpsi_prob[,i,t]) +
+      fpsi_prob[,i,t] * (1 - rho)^fj[i,t]
     eval_prob <- (sp_det * fy[i,t]) +
       (sp_not_det * (1 - fy[i,t]))
     
@@ -460,5 +333,4 @@ for(i in 1:nsite){
 }
 # total accuracy
 mean(brier_post, na.rm = TRUE)
-
-
+hist(brier_post)
