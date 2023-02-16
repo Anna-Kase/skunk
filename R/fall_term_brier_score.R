@@ -7,7 +7,7 @@ library(dplyr)
 
 
 # read in saved RDS file if not already loaded
-chain_output <- readRDS("./skunk_rds/intercept_only.rds")
+chain_output <- readRDS("./skunk_rds/fall_term.rds")
 
 
 # Sub-sample the posterior so these arrays are not as huge
@@ -26,7 +26,7 @@ mc <- split_mcmc(mod_sub)
 
 # Create nsite and nseason objects from original data prep for
 # ease of access
-source("./R/intercept_data_prep.R")
+source("./R/fall_term_data_prep.R")
 nsite <- constant_list$nsite
 nseason <- constant_list$nseason
 
@@ -121,7 +121,8 @@ for(t in 2:nseason){
       
       num <- (z[,i,t-1] * mc$phi) + 
         ((1-z[,i,t-1]) * zeta[,i,t-1] * delta_bar[,i,t-1]) +
-        ((1-z[,i,t-1]) * (1-zeta[,i,t-1])*mc$gamma)
+        ((1-z[,i,t-1]) * (1-zeta[,i,t-1])*(mc$gamma + 
+                                             (mc$gamma_fall * constant_list$season_vec[t])))
       dnm1 <- 1 - num
       # add rho
       num <- num * (1 - mc$rho)^constant_list$J[i,t]
@@ -159,7 +160,7 @@ for(t in 2:nseason){
 
 # Create empty matrix
 fpsi_prob <- array(NA, dim=c(length(my_samples2), 
-                            constant_list$nsite, constant_list$nseason))
+                             constant_list$nsite, constant_list$nseason))
 
 
 # forecasted z matrix
@@ -183,7 +184,8 @@ for(t in 2:5){
   for(i in 1:nsite){
     num <- (fz[,i,1] * mc$phi) +
       ((1-fz[,i,1]) * fzeta[,i,1] * fdelta_bar[,i,1]) +
-      ((1-fz[,i,1]) * (1-fzeta[,i,1])*mc$gamma)
+      ((1-fz[,i,1]) * (1-fzeta[,i,1])*(mc$gamma +
+                                         (mc$gamma_fall * constant_list$season_vec[t])))
     dnm1 <- 1 - num
     num <- num * (1 - mc$rho)^median(constant_list$J)
     fpsi_prob[,i,t] <- num/ (num+dnm1)
