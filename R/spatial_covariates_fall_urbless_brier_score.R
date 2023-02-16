@@ -1,11 +1,13 @@
 
 library(dplyr)
-
+library(nimble)
 
 # Spatial covariates with fall and urbless term brier scores
 
 # read in saved RDS file if not already loaded
-chain_output <- readRDS("../skunk/skunk_rds/spatial_covariates_fall_urbless.rds")
+chain_output <- readRDS("./skunk_rds/spatial_covariates_fall_urbless.rds")
+
+MCMCvis::MCMCsummary(chain_output, round = 2)
 
 chain_output <- do.call("rbind", chain_output)
 
@@ -14,7 +16,7 @@ set.seed(1995)
 
 my_samples2 <- sample(
   1:nrow(chain_output),
-  50
+  2500
 )
 
 cov_mod_sub <- chain_output[my_samples2,]
@@ -91,7 +93,7 @@ for(i in 1:nsite){
   }
 }
 d_vec <- plogis(d_vec)
-
+gc()
 # Now fill in zm, zeta, and delta_bar
 pb <- txtProgressBar(max = nsite)   # Setting up progress bar
 for(i in 1:nsite){
@@ -173,6 +175,7 @@ for(t in 2:nseason){
   }
 }
 
+gc()
 
 
 
@@ -213,24 +216,64 @@ rm(d_vec)
 gc()
 
 fd_vec <- array(NA, dim=c(length(my_samples2), nsite, nsite, 5))
+# we need new values for delta_year, which means it needs
+#  to be scaled the way we input it into the model.
+
+
+tmp_year_vec <- c(8,8,8,8,9)
+# scale the same way we did the regular data
+
+tmp_year_vec <- (tmp_year_vec - unlist(attributes(year_vec)[2])) / 
+  unlist(attributes(year_vec)[3])
+
+# do the same for delta_array
+fdmt <- array(
+  NA,
+  dim = c(nrow(dm), ncol(dm)+2, 5)
+)
+
+for(i in 1:5){
+  fdmt[,1:4,i] <- dm
+  fdmt[,5,i] <- as.numeric(year_vec[i])
+  fdmt[,6,i] <- covs$urb * as.numeric(tmp_year_vec[i])
+}
+
+fdelta_array <- array(NA, dim=c(nsite,nsite,5, 5))
+for(i in 1:nsite){
+  for(j in 1:5){
+    fdelta_array[,,1,j] <- 1
+    fdelta_array[i,,2,j] <-dm[i,2] - dm[,2]  
+    fdelta_array[i,,3,j] <- dm[i,3] - dm[,3]
+    fdelta_array[i,,4,j] <- dm[i,4] - dm[,4]
+    fdelta_array[i,,5,j] <- fdmt[i,6,j] - fdmt[,6,j] 
+  }
+}
+for(j in 1:5){
+  fdelta_array[,,2:5,j] <- fdelta_array[,,2:5,j]/site_km_array
+}
+
 for(i in 1:nsite){
   for(ti in 1:5){
-    fd_vec[,i,,ti] <- (mc$delta_beta %*% t(constant_list$delta_array[i,,,ti])) +
+    fd_vec[,i,,ti] <- (mc$delta_beta %*% t(fdelta_array[i,,,ti])) +
       (as.numeric(mc$delta_fall) * c(0,0,0,0,1)[ti]) +
-      (as.numeric(mc$delta_year) * c(0,0,0,0,1)[ti])
+      (as.numeric(mc$delta_year) * tmp_year_vec[ti])
   }
 }
 fd_vec <- plogis(fd_vec)
 
-# find number of detection days nsite, 5 matrix - add to line 193
+# now do the same thing with the gamma design matrix,
+#  which now uses the fdmt design matrix for forecasting
+pb <- txtProgressBar(max = 5, min = 2)
 for(t in 2:5){
+  setTxtProgressBar(pb, t)
   for(i in 1:nsite){
     phi <- plogis(mc$phi_beta %*% constant_list$X_phi[i,])
-    gamma <- plogis(mc$gamma_beta %*% constant_list$X_gamma[i,,t] +
+    gamma <- plogis(mc$gamma_beta %*% fdmt[i,,t] +
                       (as.numeric(mc$gamma_fall)) * c(0,0,0,0,1)[t])
     fpsi_prob[,i,t] <- (fz[,i,t-1] * phi) +
       ((1-fz[,i,t-1]) * fzeta[,i,t-1] * fdelta_bar[,i,t-1]) +
       ((1-fz[,i,t-1]) * (1-fzeta[,i,t-1])*gamma)
+  }
     fz[,,t] <- rbinom(
       prod(
         dim(fpsi_prob)[1:2]
@@ -252,7 +295,6 @@ for(t in 2:5){
       zm <- rowSums(zm)
       zm <- 1 - exp(zm)
       fdelta_bar[,i,t] <- zm
-    }
   }
 }
 
@@ -279,16 +321,6 @@ fy[fy>0] <- 1
 
 # get number of mcmc samples
 nsim <- dim(fz)[1]
-brier_post <- array(
-  NA,
-  dim = c(
-    length(my_samples2),
-    fynsite,
-    4
-  )
-)
-
-
 
 fj <- matrix(
   fyd$J,
@@ -337,4 +369,4 @@ for(i in 1:nsite){
 # total accuracy
 mean(brier_post, na.rm = TRUE)
 
-#0.6487994
+#0.70
