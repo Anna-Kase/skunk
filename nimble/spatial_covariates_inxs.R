@@ -75,7 +75,7 @@ spatial_covariates_inxs <- nimble::nimbleCode({
         logit(d_vec[i, ii, t]) <-inprod(
           delta_beta[1:ncovar_delta],
           delta_array[i,ii,1:ncovar_delta,t]
-        ) + delta_year * year_vec[t,1]
+        ) + delta_year * year_vec[t]
       }
     }
   }

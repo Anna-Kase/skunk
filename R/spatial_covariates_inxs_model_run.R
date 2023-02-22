@@ -1,6 +1,3 @@
-
-
-
 library(scales)
 library(parallel)
 library(dplyr)
@@ -47,7 +44,7 @@ run_MCMC_allcode <- function(seed, data, cons) {
   
   # fitting model mcmc
   longest_shot <- nimble::nimbleModel(
-    code=spatial_covariates_fall_urbless,
+    code=spatial_covariates_inxs,
     constants = cons,
     data = data,
     inits = core_inits

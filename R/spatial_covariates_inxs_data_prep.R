@@ -73,7 +73,11 @@ my_seasons <- apply(
   collapse = ""
 )
 # drop JA14
-my_seasons <- my_seasons[-1]
+
+my_seasons <- unique(complete$Season)
+season_vec <- rep(0, length(my_seasons))
+season_vec[grep("OC", my_seasons)] <- 1
+
 
 # get all the unique sites
 unq_sites <- unique(complete$Site)
@@ -206,6 +210,8 @@ J <- matrix(
 
 y[J==0] <- NA
 
+season_vec <- rep(0, length(my_seasons))
+season_vec[grep("OC", my_seasons)] <- 1
 
 
 # Year just needs to be a numeric vector, not a factor. We also
@@ -301,5 +307,5 @@ constant_list <- list(
   ncovar_phi = ncol(dm),
   ncovar_delta = dim(delta_array)[3],
   delta_array = delta_array,
-  year_vec = year_vec
+  year_vec = as.numeric(year_vec)
 ) 
