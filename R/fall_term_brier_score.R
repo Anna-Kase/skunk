@@ -9,13 +9,13 @@ library(dplyr)
 # read in saved RDS file if not already loaded
 chain_output <- readRDS("./skunk_rds/fall_term.rds")
 
-
+chain_output <- do.call("rbind", chain_output)
 # Sub-sample the posterior so these arrays are not as huge
 set.seed(1995)
 
 my_samples2 <- sample(
   1:nrow(chain_output),
-  5000
+  2500
 )
 
 mod_sub <- chain_output[my_samples2,]
@@ -182,13 +182,10 @@ fdelta_bar[,,1] <- delta_bar[,,nseason]
 
 for(t in 2:5){
   for(i in 1:nsite){
-    num <- (fz[,i,1] * mc$phi) +
+    fpsi_prob[,i,t] <- (fz[,i,1] * mc$phi) +
       ((1-fz[,i,1]) * fzeta[,i,1] * fdelta_bar[,i,1]) +
       ((1-fz[,i,1]) * (1-fzeta[,i,1])*(mc$gamma +
                                          (mc$gamma_fall * constant_list$season_vec[t])))
-    dnm1 <- 1 - num
-    num <- num * (1 - mc$rho)^median(constant_list$J)
-    fpsi_prob[,i,t] <- num/ (num+dnm1)
   }
   # now simulating the forecasted z matrix
   fz[,,t] <- rbinom(

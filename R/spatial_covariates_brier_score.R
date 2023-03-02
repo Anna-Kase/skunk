@@ -9,7 +9,7 @@ library(dplyr)
 # read in saved RDS file if not already loaded
 #chain_output <- readRDS("../skunk_rds/spatial_covariates.rds")
 
-chain_output <- readRDS("../skunk/skunk_rds/full_model_output.RDS")
+chain_output <- readRDS("./skunk_rds/full_model_output.RDS")
 
 chain_output <- do.call("rbind", chain_output)
 
@@ -18,7 +18,7 @@ set.seed(1995)
 
 my_samples2 <- sample(
   1:nrow(chain_output),
-  5000
+  2500
 )
 
 cov_mod_sub <- chain_output[my_samples2,]
@@ -214,11 +214,9 @@ for(t in 2:5){
     gamma <- plogis(mc$gamma_beta %*% constant_list$X_gamma[i,])
     rho <- plogis(mc$rho_beta %*% constant_list$X_rho[i,])
     
-    num <- (fz[,i,t-1] * phi) + 
+    fpsi_prob[,i,t] <- (fz[,i,t-1] * phi) + 
       ((1-fz[,i,t-1]) * fzeta[,i,t-1] * fdelta_bar[,i,t-1]) +
       ((1-fz[,i,t-1]) * (1-fzeta[,i,t-1])*gamma)
-    fpsi_prob[,i,t] <- num * (1-(1-rho)^28)
-    
   }
   
   
@@ -317,4 +315,3 @@ for(i in 1:nsite){
 # total accuracy
 mean(brier_post, na.rm = TRUE)
 
-#0.7098794
