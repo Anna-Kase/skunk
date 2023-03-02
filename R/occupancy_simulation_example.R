@@ -16,11 +16,15 @@ loc_count <- array(
   dim = c(100,100, 12)
 )
 
-# covariates
+# covariates -- this case we are using the 
+# intercept and open space
 dm <- cbind(1, rnorm(100*100))
 dm[,2] <- sort(dm[,2])
 
+# number of simulations from mcmc
 nsim <- 100
+
+
 
 pb <- txtProgressBar(max = nsim)
 for(i in 1:nsim){
@@ -35,10 +39,20 @@ for(i in 1:nsim){
     tmp_psi
   )
   for(j in 2:12){
+    zeta[i,j-1] <- 
+      locs[,,j-1] %*% tmp_neighs
+    
     tmp_gamma <- plogis(dm %*% gamma)
     tmp_phi <- plogis(dm %*% phi)
-    my_pred <- (tmp_gamma[,1] * (1 - locs[,,j-1])) +
-      (tmp_phi[,1] * locs[,,j-1])
+    tmp_delta <- 1 - exp(
+      (locs[,,j-1] * tmp_neighs) %*%
+        log(1 - (plogis(dm %*% delta)))
+    )
+    
+    my_pred <- (tmp_phi[,1] * locs[,,j-1]) +
+      ((1 - locs[,,j-1]) * zeta[, j-1] * tmp_delta[,j-1]) +
+      (tmp_gamma[,1] * (1 - locs[,,j-1]) * zeta[, j-1])
+    
     locs[,,j] <- rbinom(
       nrow(tmp_gamma),
       1,
