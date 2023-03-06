@@ -14,6 +14,7 @@ split_mcmc <- function(x){
     "list",
     length = length(unq_pars)
   )
+  # name the list
   names(result_list) <- unq_pars
   # fill in the arrays
   for(i in 1:length(result_list)){
