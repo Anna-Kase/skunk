@@ -42,7 +42,9 @@ fall_vec <- c(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
 
 oz <- array(0, dim = c(nsite, nseason))
 
+pb <- txtProgressBar(max = nsamp)
 for(s in 1:nsamp){
+  setTxtProgressBar(pb, i)
 # simulation model
   tmp_psi <- dm_covs %*% mc$psi_beta[s,]
   tmp_psi <- plogis(tmp_psi)
@@ -94,7 +96,7 @@ for(i in 1:nsim){
   oz <- oz + z
 }
 
-
+write.csv(oz, "./data/original_z_sim_values.csv")
 
 mu_z <- oz/(nsim*nsamp)
 
