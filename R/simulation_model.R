@@ -1,10 +1,8 @@
 
 library(dplyr)
-
+library(parallel)
 
 locs <- readRDS("./data/simulation_neighbors.RDS")
-locs[[1]]
-
 
 covs <- read.csv("./data/scaled_simulation_covariates.csv")
 
@@ -12,7 +10,7 @@ output <- readRDS("./skunk_rds/spatial_covariates_fall2.RDS")
 source("./R/mcmc_functions.R")
 output <- do.call("rbind", output)
 set.seed(89)
-nsamp <- 2500
+nsamp <- 10000
 output <- output[sample(1:nrow(output), nsamp),]
 mc <- split_mcmc(output)
 
@@ -29,30 +27,25 @@ for(i in 1:nrow(covs)){
 }
 
 
-
-
-
-# number of simulations from mcmc
-nsim <- 100
-
 nsite <- nrow(dm_covs)
 nseason <- 12
-fall_vec <- c(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
+# this is from our model object, we are not
+#  going to use all of it.
+fall_vec <- c(0, 0, 1, 0, 0, 0, 1, 0, 0,
+              0, 1, 0, 0, 0, 1, 0, 0, 0,
+              1, 0, 0,
               0, 1, 0, 0, 0, 1)
 
 oz <- array(0, dim = c(nsite, nseason))
-
 pb <- txtProgressBar(max = nsamp)
 for(s in 1:nsamp){
-  setTxtProgressBar(pb, i)
+  setTxtProgressBar(pb, s)
+  
 # simulation model
   tmp_psi <- dm_covs %*% mc$psi_beta[s,]
   tmp_psi <- plogis(tmp_psi)
   z <- matrix(NA, nrow=nsite, ncol=nseason)
-
-for(i in 1:nsim){  
   # initial occupancy
-  
   # sample across the landscape
   z[,1] <- rbinom(
     nrow(tmp_psi),
@@ -62,28 +55,42 @@ for(i in 1:nsim){
   
   for(j in 2:12){
     my_prob <- rep(NA, nsite)
+    has_n <- rep(NA, nsite)
     for(site in 1:nsite){
-      nn <- locs[[site]]
-      has_n <- as.numeric(sum(z[nn,j-1]) > 0)
-      if(z[site,j-1] == 1){
-        tmp_phi <- dm_covs[site,] %*% mc$phi_beta[s,]
-        my_prob[site] <- plogis(tmp_phi)
-      }
-      if(z[site,j-1] == 0 & !has_n){
-        tmp_gamma <- dm_covs[site,] %*% mc$gamma_beta[s,] + 
-          mc$gamma_fall[s,] * fall_vec[j]
-        my_prob[site] <- plogis(tmp_gamma)
-      }
-      if(z[site,j-1] == 0 & has_n){
-        tmp_delta <- dm_delta[[site]] %*% mc$delta_beta[s,] +
-          mc$delta_fall[s,] * fall_vec[j]
-        tmp_delta <- plogis(tmp_delta)
-        my_prob[site] <- 1 - exp(
-          t(log(1 - tmp_delta)) %*%
-          (z[locs[[site]],j-1]) 
-        )
-      }
+      has_n[site] <- as.numeric(sum(z[locs[[site]],j-1]) > 0)
     }
+    # phi sites
+    phi_sites <- which(z[,j-1] == 1)
+    if(length(phi_sites)>0){
+      tmp_phi <- dm_covs[phi_sites,] %*% mc$phi_beta[s,]
+      my_prob[phi_sites] <- plogis(tmp_phi)
+      
+    }
+    gamma_sites <- which(z[,j-1] == 0 & !has_n)
+      if(length(gamma_sites)>0){
+        tmp_gamma <- dm_covs[gamma_sites,] %*% mc$gamma_beta[s,] + 
+          mc$gamma_fall[s,] * fall_vec[j]
+        my_prob[gamma_sites] <- plogis(tmp_gamma)
+      }
+    
+    delta_sites <- which(z[,j-1] == 0 & has_n)
+      if(length(delta_sites)>0){
+        X <- dm_delta[delta_sites]
+        Y <- locs[delta_sites]
+        tmp_delta <- sapply(
+              1:length(delta_sites),
+              function(idx){
+                td <- ( X[[idx]] %*% mc$delta_beta[s,] + 
+                         mc$delta_fall[s,] * fall_vec[j])
+                td <- log(1 - plogis(td))
+                td <- 1 - exp(
+                  t(td) %*% z[Y[[idx]],j-1]
+                )
+                td
+              }
+        )
+        my_prob[delta_sites] <- tmp_delta
+      }
       
     z[,j] <- rbinom(
       length(my_prob),
@@ -91,18 +98,33 @@ for(i in 1:nsim){
       my_prob
     )
     }  
-}
-  
   oz <- oz + z
 }
 
 write.csv(oz, "./data/original_z_sim_values.csv")
 
-mu_z <- oz/(nsim*nsamp)
+# average occupancy each site and season
+mu_z <- oz/(nsamp)
 
-tmp_sd <- rowSums(oz)
-sd_mat <- matrix(0, nrow = nsite, ncol = nsim*nsamp*nseason)
-for(i in 1:nrow(sd_mat)){
-  sd_mat[i,1:tmp_sd[i]] <- 1
-}
-site_sd <- apply(sd_mat, 1, sd)
+# overall occupancy throughout study
+gmu_z <- rowMeans(mu_z)
+
+# variation in occupancy across seasons
+occ_sd <- apply(mu_z, 1, sd)
+
+gr <- read.csv(
+  "./data/raw_sim_covariates/point_locs.csv"
+)
+
+library(sf)
+sf::sf_use_s2(FALSE)
+gr <- sf::st_as_sf(
+  gr,
+  coords = c("x","y"),
+  crs = 32616
+)
+gr$occ_prob <- gmu_z
+gr$occ_sd <- occ_sd
+
+plot(gr["occ_prob"], pch = 15)
+plot(gr["occ_sd"], pch = 15)
