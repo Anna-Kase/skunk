@@ -10,7 +10,7 @@ output <- readRDS("./skunk_rds/spatial_covariates_fall2.RDS")
 source("./R/mcmc_functions.R")
 output <- do.call("rbind", output)
 set.seed(89)
-nsamp <- 10000
+nsamp <- 10
 output <- output[sample(1:nrow(output), nsamp),]
 mc <- split_mcmc(output)
 
@@ -37,6 +37,8 @@ fall_vec <- c(0, 0, 1, 0, 0, 0, 1, 0, 0,
               0, 1, 0, 0, 0, 1)
 
 oz <- array(0, dim = c(nsite, nseason))
+plot_array <- array(0, dim=c(nsamp, 3, nseason))
+
 pb <- txtProgressBar(max = nsamp)
 for(s in 1:nsamp){
   setTxtProgressBar(pb, s)
@@ -56,6 +58,7 @@ for(s in 1:nsamp){
   for(j in 2:12){
     my_prob <- rep(NA, nsite)
     has_n <- rep(NA, nsite)
+    
     for(site in 1:nsite){
       has_n[site] <- as.numeric(sum(z[locs[[site]],j-1]) > 0)
     }
@@ -71,6 +74,7 @@ for(s in 1:nsamp){
         tmp_gamma <- dm_covs[gamma_sites,] %*% mc$gamma_beta[s,] + 
           mc$gamma_fall[s,] * fall_vec[j]
         my_prob[gamma_sites] <- plogis(tmp_gamma)
+      
       }
     
     delta_sites <- which(z[,j-1] == 0 & has_n)
@@ -90,6 +94,7 @@ for(s in 1:nsamp){
               }
         )
         my_prob[delta_sites] <- tmp_delta
+      
       }
       
     z[,j] <- rbinom(
@@ -97,11 +102,17 @@ for(s in 1:nsamp){
       1,
       my_prob
     )
+    
+    plot_array[s,1,j] <- length(my_prob[phi_sites])
+    plot_array[s,2,j] <- length(my_prob[gamma_sites])
+    plot_array[s,3,j] <- length(my_prob[delta_sites])
+    
     }  
   oz <- oz + z
+
 }
 
-write.csv(oz, "./data/original_z_sim_values.csv")
+#write.csv(oz, "./data/original_z_sim_values.csv")
 
 # average occupancy each site and season
 mu_z <- oz/(nsamp)
@@ -128,3 +139,38 @@ gr$occ_sd <- occ_sd
 
 plot(gr["occ_prob"], pch = 15)
 plot(gr["occ_sd"], pch = 15)
+
+
+
+# Changes in phi, gamma, delta over simulated time
+
+library(bbplot)
+
+windows(7, 3)
+
+{
+  par(mar = c(5, 2, 0.5, 0.5), oma = c(0, 5, 0, 0), lend = 1)
+  bbplot::blank(xlim = c(1,12), ylim = c(0, 1), bty = "l")
+  
+  bbplot::axis_blank(1, at = seq(1, 12, by = 1))
+  bbplot::axis_blank(2)
+  bbplot::axis_text(text = seq(1, 12, 1), side = 1, line = 0.9,
+                    at = seq(1, 12, 1))
+  bbplot::axis_text(side = 2, las = 1, line = 0.4)
+  bbplot::axis_text("Simulated Season", side = 1, line = 2.5)
+  bbplot::axis_text("Proportion Sites", side = 2, outer = TRUE, at = 0.6, 
+                    line = 2)
+  
+  points(
+    x = c(1:12)-0.125,
+    y = ((sum(plot_array[1:nsamp,1,1:12]))/nsite)/nsamp,
+    pch = 18,
+    col = "black",
+    cex = 2
+  )
+}
+
+
+
+
+  
