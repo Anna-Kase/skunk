@@ -5,6 +5,8 @@ library(prettymapr)
 sf::sf_use_s2(FALSE)
 library(bbplot)
 
+
+
 utm_crs <- 32616
 
 oz <- read.csv(
@@ -121,7 +123,8 @@ water_crop <-  sf::st_intersection(
 
 
 
-# actually plotting here
+
+# OCCUPANCY MAP
 
 
 windows(3.5, 3.5)
@@ -135,8 +138,9 @@ tiff(
   compression = "lzw"
 )
 
-{
+
 plot(st_geometry(county_crop))
+
 plot(
   gr["occ_prob"],
   pch = 19,
@@ -160,15 +164,14 @@ addscalebar(plotepsg = utm_crs, style = "ticks",
             lwd = 2, padin = c(1.07,-0.175), label.cex = 1)
 addnortharrow(pos = "topright", padin = c(0.1,0.19), scale = 0.7)
 
-}
+
 
 dev.off()
 
 
 
 
-
-
+# STANDARD DEVIATION MAP
 
 windows(3.5, 3.5)
 
@@ -184,7 +187,7 @@ tiff(
 {
   plot(st_geometry(county_crop))
   plot(
-    gr["occ_sd"],
+   gr["occ_sd"],
     pch = 19,
     add = TRUE
   )
