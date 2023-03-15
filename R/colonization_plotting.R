@@ -16,7 +16,6 @@ source("./R/mcmc_functions.R")
 output <- do.call("rbind", output)
 mc <- split_mcmc(output)
 
-file.edit("./R/scaled_covariates.R")
 
 sc <- read.csv("./data/site_covariates.csv")
 
@@ -171,19 +170,19 @@ bbplot::axis_text("Urbanization", side = 1, line = 2.5)
 bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, 
                   line = 2)
 bbplot::ribbon(x = pretty_urb,
-               y = urb_gamma[,-2], col = "darkgreen", alpha = 0.5)
+               y = urb_gamma[,-2], col = "lightblue4", alpha = 0.5)
 bbplot::ribbon(x = pretty_urb, 
-               y = urb_gamma_fall[,-2], col = "purple", alpha = 0.5)
-lines(x = pretty_urb, y = urb_gamma[,2], col = "darkgreen", lwd = 3)
+               y = urb_gamma_fall[,-2], col = "goldenrod", alpha = 0.5)
+lines(x = pretty_urb, y = urb_gamma[,2], col = "lightblue4", lwd = 3)
 lines(x = pretty_urb, y = urb_gamma_fall[,2],
-      col = "purple", lwd = 3, lty = 2)
+      col = "goldenrod", lwd = 3, lty = 2)
 legend(
    x= u[1],
    y = 0.87,
   legend = c("Fall", "Spring, Summer, Winter"),
   lty = c(2,1),
   lwd = 3,
-  col = c("purple", "darkgreen"),
+  col = c("goldenrod", "lightblue4"),
   bty = "n",
   seg.len = 3.25
 )
@@ -204,12 +203,12 @@ bbplot::axis_text(c(0, 4, 9, 14), side = 1, line = 0.9, at = c(0, 4000, 9000, 14
 bbplot::axis_text("Distance to water (km)", side = 1, line = 2.5)
 bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, line = 2)
 bbplot::ribbon(x = pretty_water,
-               y = water_gamma[,-2], col = "darkgreen", alpha = 0.5)
+               y = water_gamma[,-2], col = "lightblue4", alpha = 0.5)
 bbplot::ribbon(x = pretty_water, 
-               y = water_gamma_fall[,-2], col = "purple", alpha = 0.5)
-lines(x = pretty_water, y = water_gamma[,2], col = "darkgreen", lwd = 3)
+               y = water_gamma_fall[,-2], col = "goldenrod", alpha = 0.5)
+lines(x = pretty_water, y = water_gamma[,2], col = "lightblue4", lwd = 3)
 lines(x = pretty_water, y = water_gamma_fall[,2],
-      col = "purple", lwd = 3, lty = 2)
+      col = "goldenrod", lwd = 3, lty = 2)
 
 
 
@@ -231,11 +230,11 @@ bbplot::axis_text("Urban open space", side = 1, line = 2.5)
 bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, 
                   line = 2)
 bbplot::ribbon(x = pretty_open,
-               y = open_gamma[,-2], col = "darkgreen", alpha = 0.5)
+               y = open_gamma[,-2], col = "lightblue4", alpha = 0.5)
 bbplot::ribbon(x = pretty_open, 
-               y = open_gamma_fall[,-2], col = "purple", alpha = 0.5)
-lines(x = pretty_open, y = open_gamma[,2], col = "darkgreen", lwd = 3)
+               y = open_gamma_fall[,-2], col = "goldenrod", alpha = 0.5)
+lines(x = pretty_open, y = open_gamma[,2], col = "lightblue4", lwd = 3)
 lines(x = pretty_open, y = open_gamma_fall[,2],
-      col = "purple", lwd = 3, lty = 2)
+      col = "goldenrod", lwd = 3, lty = 2)
 }
 dev.off()

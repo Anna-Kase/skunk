@@ -31,7 +31,7 @@ gr <- sf::st_as_sf(
 gr$occ_prob <- gmu_z
 gr$occ_sd <- occ_sd
 
-windows()
+
 
 
 
@@ -40,6 +40,12 @@ windows()
 
 
 windows(7, 3)
+
+svg(
+  "./plots/colonization_changes.svg",
+  height = 3,
+  width = 7
+)
 
 {
   par(mar = c(3, 4, 0.5, 10), oma = c(0,0,0,0), lend = 1)
@@ -51,9 +57,9 @@ windows(7, 3)
                     at = seq(1, 11, 1))
   bbplot::axis_text(side = 2, las = 1, line = 0.4)
   bbplot::axis_text("Season", side = 1, line = 1.5, cex = 1.2)
-  bbplot::axis_text("Proportion sites", side = 2, at = 0.3, 
+  bbplot::axis_text("Proportion of sites", side = 2, at = 0.3, 
                     line = 2.25, cex = 1.2)
-  my_col <- c("purple", "black", "green")
+  my_col <- c("goldenrod", "black", "lightblue4")
   my_jiggle <- c(-0.125,0, 0.125)
   my_pch <- c(21,22,23)
   for(i in 1:3){
@@ -92,6 +98,7 @@ windows(7, 3)
   
 }
 
+dev.off()
 
 
 

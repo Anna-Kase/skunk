@@ -8,7 +8,7 @@ output <- readRDS("./skunk_rds/spatial_covariates_fall2.RDS")
 source("./R/mcmc_functions.R")
 output <- do.call("rbind", output)
 set.seed(89)
-nsamp <- 100
+nsamp <- 1000
 output <- output[sample(1:nrow(output), nsamp),]
 mc <- split_mcmc(output)
 

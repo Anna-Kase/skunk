@@ -133,8 +133,8 @@ layout(m)
   bbplot::axis_text("Pr(Persistence)", side = 2, outer = TRUE, at = 0.6, 
                     line = 2)
   bbplot::ribbon(x = pretty_urb,
-                 y = urb_phi[,-2], col = "darkgreen", alpha = 0.5)
-  lines(x = pretty_urb, y = urb_phi[,2], col = "darkgreen", lwd = 3)
+                 y = urb_phi[,-2], col = "goldenrod", alpha = 0.5)
+  lines(x = pretty_urb, y = urb_phi[,2], col = "goldenrod", lwd = 3)
 
 
   bbplot::blank(xlim = range(pretty_water), ylim = c(0, 1), bty = "l")
@@ -153,8 +153,8 @@ layout(m)
   bbplot::axis_text("Distance to water (km)", side = 1, line = 2.5)
   bbplot::axis_text("Pr(Persistence)", side = 2, outer = TRUE, at = 0.6, line = 2)
   bbplot::ribbon(x = pretty_water,
-                 y = water_phi[,-2], col = "darkgreen", alpha = 0.5)
-  lines(x = pretty_water, y = water_phi[,2], col = "darkgreen", lwd = 3)
+                 y = water_phi[,-2], col = "goldenrod", alpha = 0.5)
+  lines(x = pretty_water, y = water_phi[,2], col = "goldenrod", lwd = 3)
 
   
   bbplot::blank(xlim = range(pretty_open), ylim = c(0, 1), bty = "l")
@@ -175,8 +175,8 @@ layout(m)
   bbplot::axis_text("Pr(Persistence)", side = 2, outer = TRUE, at = 0.6, 
                     line = 2)
   bbplot::ribbon(x = pretty_open,
-                 y = open_phi[,-2], col = "darkgreen", alpha = 0.5)
-  lines(x = pretty_open, y = open_phi[,2], col = "darkgreen", lwd = 3)
+                 y = open_phi[,-2], col = "goldenrod", alpha = 0.5)
+  lines(x = pretty_open, y = open_phi[,2], col = "goldenrod", lwd = 3)
 }
 dev.off()
 

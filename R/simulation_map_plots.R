@@ -120,44 +120,110 @@ water_crop <-  sf::st_intersection(
 ) 
 
 
+# make a buffer to plot on maps to make a nice smooth edge
+# around the study area
+all_counties <- sf::st_union(county_crop)
+county_buff <- sf::st_buffer(all_counties, 2000)
+county_donut <- sf::st_sym_difference(county_buff, all_counties)
 
 
 
-
-# OCCUPANCY MAP
+#### occupancy map ####
 
 
 windows(3.5, 3.5)
 
-tiff(
-  "./plots/mean_occ_map.tiff",
+svg(
+  "./plots/mean_occ.svg",
   height = 3.5,
-  width = 4.5,
-  units = "in",
-  res = 600,
-  compression = "lzw"
+  width = 3.5
 )
 
+par(mar = c(1,1,1,1))
 
-plot(st_geometry(county_crop))
+
+my_pal <- pals::ocean.speed(11)
 
 plot(
   gr["occ_prob"],
   pch = 19,
-  add = TRUE
+  cex = 0.8,
+  pal = my_pal,
+  nbreaks = 10,
+  reset = FALSE,
+  main = ""
 )
 
-plot(st_geometry(water_crop), 
+plot(st_geometry(water_crop),
      add=TRUE,
      col = scales::alpha("white", 0.5),
      lwd = 1.4
-     )
+)
+plot(st_geometry(county_donut),
+     col = "white",
+     border = NA,
+     add = TRUE
+)
 
-plot(st_geometry(county_crop), 
+plot(st_geometry(county_crop),
      col = "NA",
      add = TRUE,
      lwd = 2
-     )
+)
+
+par(xpd = NA)
+addscalebar(plotepsg = utm_crs, style = "ticks",
+            lwd = 2, padin = c(1.07,-0.175), label.cex = 1)
+addnortharrow(pos = "topright", padin = c(0.1,0.19), scale = 0.7)
+
+
+
+dev.off()
+
+
+
+#### standard deviation map ####
+
+
+windows(3.5, 3.5)
+
+svg(
+  "./plots/sd_occ.svg",
+  height = 3.5,
+  width = 3.5
+)
+
+par(mar = c(1,1,1,1))
+
+
+my_pal <- pals::brewer.blues(9)
+
+plot(
+  gr["occ_sd"],
+  pch = 19,
+  cex = 0.8,
+  pal = my_pal,
+  nbreaks = 8,
+  reset = FALSE,
+  main = ""
+)
+
+plot(st_geometry(water_crop),
+     add=TRUE,
+     col = scales::alpha("white", 0.5),
+     lwd = 1.4
+)
+plot(st_geometry(county_donut),
+     col = "white",
+     border = NA,
+     add = TRUE
+)
+
+plot(st_geometry(county_crop),
+     col = "NA",
+     add = TRUE,
+     lwd = 2
+)
 
 par(xpd = NA)
 addscalebar(plotepsg = utm_crs, style = "ticks",
@@ -171,44 +237,138 @@ dev.off()
 
 
 
-# STANDARD DEVIATION MAP
+
+
+#### mixture map ####
+
+
+bb <- gr %>% 
+  dplyr::mutate(
+    op_cat = cut(occ_prob, breaks = 3),
+    os_cat = cut(occ_sd, breaks = 3)
+  )
+
+# number of categories
+ncat <- length(
+  levels(
+    bb$op_cat
+  )
+)
+
+# names of the different scales (to match
+#  colors)
+scale_names <- paste0(
+  rep(1:ncat, each = ncat), " - ", rep(1:ncat, ncat)
+)
+
+# the colors
+scale_vals <- pals::brewer.seqseq2()
+
+# make group names to match with scale_names
+bb$group <- paste0(
+  as.numeric(bb$op_cat)," - ", as.numeric(bb$os_cat)
+)
+# give them the scale_names as levels
+bb$group <- factor(
+  bb$group,
+  levels = scale_names
+)
+
+# convert to numeric to match to colors
+bb$color <- scale_vals[
+  as.numeric(bb$group)
+]
+
+
 
 windows(3.5, 3.5)
 
-tiff(
-  "./plots/sd_occ_map.tiff",
+svg(
+  "./plots/bivariate.svg",
   height = 3.5,
-  width = 4.5,
-  units = "in",
-  res = 600,
-  compression = "lzw"
+  width = 3.5
 )
 
-{
-  plot(st_geometry(county_crop))
-  plot(
-   gr["occ_sd"],
-    pch = 19,
-    add = TRUE
-  )
-  
+par(mar = c(1,1,1,1))
+
+plot(st_geometry(county_crop))
+
+plot(
+  st_geometry(bb),
+  pch = 19,
+  add = TRUE,
+  cex = 0.8,
+  col = bb$color
+)
+
   plot(st_geometry(water_crop), 
-       add=TRUE,
-       col = scales::alpha("white", 0.5),
-       lwd = 1.4
-  )
-  
-  plot(st_geometry(county_crop), 
-       col = "NA",
-       add = TRUE,
-       lwd = 2
-  )
-  
-  par(xpd = NA)
-  addscalebar(plotepsg = utm_crs, style = "ticks",
-              lwd = 2, padin = c(1.07,-0.175), label.cex = 1)
-  addnortharrow(pos = "topright", padin = c(0.1,0.19), scale = 0.7)
-  
-}
+     add=TRUE,
+     col = scales::alpha("white", 0.5),
+     lwd = 1.4
+)
+plot(st_geometry(county_donut),
+     col = "white",
+     border = NA,
+     add = TRUE
+)
+
+plot(st_geometry(county_crop), 
+     col = "NA",
+     add = TRUE,
+     lwd = 2
+)
+
+par(xpd = NA)
+addscalebar(plotepsg = utm_crs, style = "ticks",
+            lwd = 2, padin = c(1.07,-0.175), label.cex = 1)
+addnortharrow(pos = "topright", padin = c(0.1,0.19), scale = 0.7)
+
+
 
 dev.off()
+
+
+
+#### county reference lines ####
+
+
+windows(3.5, 3.5)
+
+svg(
+  "./plots/county_reference.svg",
+  height = 3.5,
+  width = 3.5
+)
+
+par(mar = c(1,1,1,1))
+
+
+
+plot(st_geometry(water_crop),
+     col = scales::alpha("white", 0.5),
+     lwd = 1.4
+)
+plot(st_geometry(county_donut),
+     col = "white",
+     border = NA,
+     add = TRUE
+)
+
+plot(st_geometry(county_crop),
+     col = "NA",
+     add = TRUE,
+     lwd = 2
+)
+
+par(xpd = NA)
+addscalebar(plotepsg = utm_crs, style = "ticks",
+            lwd = 2, padin = c(1.07,-0.175), label.cex = 1)
+addnortharrow(pos = "topright", padin = c(0.1,0.19), scale = 0.7)
+
+
+
+dev.off()
+
+
+
+

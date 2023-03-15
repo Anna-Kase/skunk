@@ -86,22 +86,22 @@ for(i in 1:3){
   lines(
     x = rep(i-0.125,2),
     y = delta_prob_fall[-2,i],
-    col ="purple",
+    col ="goldenrod",
     lwd = 3
   )
 }
 points(
   x = c(1:3)-0.125,
   y = delta_prob_fall[2,],
-  pch = 18,
+  pch = 20,
   col = "black",
   cex = 2
 )
 points(
   x = c(1:3)-0.125,
   y = delta_prob_fall[2,],
-  pch = 18,
-  col = "purple",
+  pch = 20,
+  col = "goldenrod",
   cex = 1.5
 )
 
@@ -109,22 +109,22 @@ for(i in 1:3){
   lines(
     x = rep(i+0.125,2),
     y = delta_prob[-2,i],
-    col ="darkgreen",
+    col ="lightblue4",
     lwd = 3
   )
 }
 points(
   x = c(1:3)+0.125,
   y = delta_prob[2,],
-  pch = 19,
+  pch = 18,
   col = "black",
   cex = 1.5
 )
 points(
   x = c(1:3)+0.125,
   y = delta_prob[2,],
-  pch = 19,
-  col = "darkgreen",
+  pch = 18,
+  col = "lightblue4",
   cex = 1
 )
 
@@ -133,8 +133,8 @@ legend(
   x= 0.4,
   y = 0.85,
   legend = c("Fall", "Spring, Summer, Winter"),
-  pch = c(18,19),
-  col = c("purple", "darkgreen"),
+  pch = c(20,18),
+  col = c("goldenrod", "lightblue4"),
   bty = "n",
   cex = 0.65,
   pt.cex = c(1.5,1)
