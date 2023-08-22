@@ -5,7 +5,7 @@ library(nimble)
 # Spatial covariates with  urbless term brier scores
 
 # read in saved RDS file if not already loaded
-chain_output <- readRDS("./skunk_rds/spatial_covariates_urbless.rds")
+chain_output <- readRDS("./skunk_rds/spatial_covariates_inxs.rds")
 
 MCMCvis::MCMCsummary(chain_output, round = 2)
 
@@ -29,7 +29,7 @@ mc <- split_mcmc(cov_mod_sub)
 
 # Create nsite and nseason objects from original data prep for
 # ease of access
-source("./R/spatial_covariates_urbless_data_prep.R")
+source("./R/spatial_covariates_inxs_data_prep.R")
 nsite <- constant_list$nsite
 nseason <- constant_list$nseason
 
