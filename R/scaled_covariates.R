@@ -25,7 +25,7 @@ source("./R/creating_spatial_points.R")
 
 #  High-res Landcover for NE Illinois 
 #  Data can be downloaded from:
-#  browseURL("https://datahub.cmap.illinois.gov/dataset/high-resolution-land-cover-ne-illinois-and-nw-indiana-2010")
+  browseURL("https://datahub.cmap.illinois.gov/dataset/high-resolution-land-cover-ne-illinois-and-nw-indiana-2010")
 #  Load LULC map
 
 my_raster_path <-
