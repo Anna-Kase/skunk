@@ -1,10 +1,10 @@
 
 # Creating a distance to stream covariate
-library(dplyr)
-library(sf)
+# library(dplyr)
+# library(sf)
 
 # source spatial points file
-source("./R/creating_spatial_points.R")
+#source("./R/creating_spatial_points.R")
 
 
 # Dowload data from:
@@ -117,7 +117,4 @@ if(!"water_dist" %in% colnames(my_covariates)){
     row.names = FALSE
   )
 }
-
-
-
 

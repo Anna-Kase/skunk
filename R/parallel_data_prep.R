@@ -175,4 +175,3 @@ constant_list <- list(
   ncovar_delta = dim(delta_array)[3],
   delta_array = delta_array
 ) 
-

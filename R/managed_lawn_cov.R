@@ -9,6 +9,7 @@ library(uwinspatialtools)
 source("./R/creating_spatial_points.R")
 
 
+
 # Dowload data from:
 # browseURL("https://www.mrlc.gov/data/nlcd-2019-land-cover-conus")
 # load water data
@@ -75,9 +76,5 @@ if(!"open_dev" %in% colnames(my_covariates)){
     row.names = FALSE
   )
 }
-
-
-
-
 
 

@@ -32,8 +32,9 @@ nseason <- constant_list$nseason
 # Create empty arrays to house calculated z values and the probabilities needed
 # to calculate those z values (aka indicator function for species presence)
 
-z <- z_prob <- array(NA, dim=c(length(my_samples), constant_list$nsite, constant_list$nseason+4))
-
+z <- z_prob <- array(NA, dim=c(length(my_samples), 
+                               constant_list$nsite, 
+                               constant_list$nseason))
 
 
 # Calculating z probabilities for the first season of data (t=1)
@@ -64,8 +65,6 @@ z[,,1] <- rbinom(
 
 # Fill in delta_bar (aka neighborhood colonization probabilities) at t=1
 
-
-
 # Create empty delta_bar and zeta arrays
 delta_bar <- zeta <- array(dim=dim(z_prob))
 
@@ -93,6 +92,7 @@ for(i in 1:nsite){
   # by the log(1-d_vec) (our nearby colonization covariate), then summing
   # those probabilities, convert the log probabilities back to 
   # numeric probabilities, and then fill those into the delta_bar array
+
 
   # the last lines in this loop are all to fill in the delta_bar array.
   # that is, we are calculating neighborhood colonization probabilities
@@ -244,6 +244,5 @@ for(t in (nseason+1):(nseason+4)){
     psi_prob[,i,t] <- num
   }
 }
-
 
 
