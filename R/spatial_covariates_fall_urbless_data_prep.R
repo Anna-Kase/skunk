@@ -310,7 +310,7 @@ constant_list <- list(
   m=site_m,
   X_psi = dm,
   X_rho = dm,
-  X_gamma = dmt, 
+  X_gamma = dmt,
   X_phi = dm,
   ncovar_psi = ncol(dm),
   ncovar_rho = ncol(dm),

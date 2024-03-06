@@ -74,7 +74,8 @@ spatial_covariates_fall_urbless <- nimble::nimbleCode({
           delta_beta[1:ncovar_delta],
           delta_array[i,ii,1:ncovar_delta,t]
         ) + (delta_fall*season_vec[t]) +
-          delta_year * year_vec[t,1]
+          delta_year * year_vec[t]
+
       }
     }
   }
