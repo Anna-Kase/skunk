@@ -1,14 +1,12 @@
 
 
-
-
 spatial_covariates_fall <- nimble::nimbleCode({
   for(i in 1:nsite){
-    logit(psi[i,1]) <- inprod(
+    logit(psi[i]) <- inprod(
       psi_beta[1:ncovar_psi],
       X_psi[i, 1:ncovar_psi]
     )
-    z[i,1] ~ dbern(psi[i,1])
+    z[i,1] ~ dbern(psi[i])
     delta_bar[i,1] <- (1 - exp(
       inprod(
         (z[1:nsite, 1]*m[i,1:nsite]),
@@ -20,7 +18,8 @@ spatial_covariates_fall <- nimble::nimbleCode({
       zeta[i,t-1] <- step(
         inprod(
           z[1:nsite, t-1],
-          m[i, 1:nsite])-1
+          m[i, 1:nsite]
+        )-1
       )
       delta_bar[i,t] <- (1 - exp(
         inprod(

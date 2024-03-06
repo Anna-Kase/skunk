@@ -1,7 +1,3 @@
-
-
-
-
 library(scales)
 library(parallel)
 library(dplyr)
@@ -54,13 +50,16 @@ run_MCMC_allcode <- function(seed, data, cons) {
     inits = core_inits
   )
   
-  CmyModel <- compileNimble(longest_shot)
+  CmyModel <- nimble::compileNimble(longest_shot)
   
-  myMCMC <- buildMCMC(CmyModel)
-  CmyMCMC <- compileNimble(myMCMC)
+  myMCMC <- nimble::buildMCMC(CmyModel)
+  CmyMCMC <- nimble::compileNimble(myMCMC)
   
-  results <- runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 1,
-                     setSeed = seed, inits = core_inits)
+
+  results <- nimble::runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 1,
+                     setSeed = seed, inits = core_inits,
+                     progressBar = getNimbleOption("MCMCprogressBar"))
+
   
   return(results)
   
