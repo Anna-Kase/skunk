@@ -7,19 +7,20 @@ library(MCMCvis)
 
 sf::sf_use_s2(FALSE)
 
-# intercept only model
+source("./R/create_m_n.R")
+source("./R/init_functions.R")
 
+# intercept only model
 model_type <- "intercept"
-source("./R/create_m_n.R") 
 source("./nimble/intercept_only.R")
 source("./R/prep_data.R")
 
-nimbleOptions(verbose=FALSE)
 long_shot <- nimble::nimbleMCMC(
   code=my_model,
   constants = constant_list,
   data = data_list,
-  monitors = c("psi", "rho", "d", "gamma", "phi")
+  monitors = c("psi", "rho", "delta", "gamma", "phi"),
+  inits = intercept_inits()
 )
 
 
@@ -27,6 +28,12 @@ MCMCvis::MCMCsummary(
   long_shot,
   digits=2
 )
+
+
+#saveRDS(long_shot, "../intercept_only.rds")
+
+
+
 
 # covariate model
 model_type <- "covariate"
@@ -79,3 +86,26 @@ MCMCvis::MCMCsummary(
 # psi_beta[2]   -0.570 0.240 -1.1000 -0.550 -0.120    1  4831
 # rho_beta[1]   -2.000 0.061 -2.1000 -2.000 -1.900    1  7127
 # rho_beta[2]    0.096 0.052 -0.0058  0.097  0.200    1  6902
+
+
+
+# Model with 3 Covariates (urb, water_dist, open_dev) with NO interactions
+# covariate model
+model_type <- "covariate3"
+source("./R/create_m_n.R") 
+source("./nimble/three_cov_model.R")
+source("./R/prep_data.R")
+
+longest_shot <- nimble::nimbleMCMC(
+  code=three_cov_model,
+  constants = constant_list,
+  data = data_list,
+  monitors = c("psi_beta", "rho_beta", "delta_beta", "gamma_beta", "phi_beta"),
+  nburnin = 5000,
+  nchains = 2,
+  niter = 30000
+)
+
+
+
+

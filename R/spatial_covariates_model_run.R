@@ -1,18 +1,21 @@
 
+# Spatial covariates model run
+library(scales)
+
+# The One Script to Run Them All
+source("./R/parallel_data_prep.R") 
+source("./nimble/three_cov_model.R")
 
 
 
 library(scales)
 library(parallel)
 library(dplyr)
+library(nimble)
+library(MCMCvis)
 
-source("./R/full_data_prep.R") 
+source("./R/spatial_covariates_data_prep.R") 
 source("./nimble/spatial_covariates_model.R")
-
-
-
-set.seed(7)
-
 
 run_MCMC_allcode <- function(seed, data, cons) {
   
@@ -49,13 +52,28 @@ run_MCMC_allcode <- function(seed, data, cons) {
     data = data,
     inits = core_inits
   )
+  conf <- configureMCMC(
+    longest_shot, 
+    monitors = c(
+      "delta_beta",
+      "gamma_beta",
+      "phi_beta",
+      "psi_beta",
+      "rho_beta"), 
+    thin = 1
+  )
+  Rmcmc <- buildMCMC(conf)
+  compiledList <- compileNimble(longest_shot, Rmcmc)
+  Cmcmc <- compiledList$Rmcmc
   
   CmyModel <- compileNimble(longest_shot)
   
   myMCMC <- buildMCMC(CmyModel)
   CmyMCMC <- compileNimble(myMCMC)
   
-  results <- runMCMC(CmyMCMC, niter = 20000, setSeed = seed, inits = core_inits)
+  results <- runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 1,
+                     setSeed = seed, inits = core_inits)
+
   
   return(results)
 
@@ -75,31 +93,31 @@ chain_output <- parLapply(cl = my_cluster, X = 1:4,
 stopCluster(my_cluster)
 
 # save the model output because this took a long time to run
-saveRDS(chain_output, file = "../skunk/spatial_covariates.RDS")
+saveRDS(chain_output, file = "../skunk_rds/spatial_covariates.rds")
 
 
-rds <- readRDS("../skunk/full_model_output.RDS")
+sc <- readRDS("../skunk_rds/spatial_covariates.rds")
 
-head(rds[[1]])
+head(sc[[1]])
 
-plot(rds[[1]][,2], type = "l")
+plot(sc[[1]][,2], type = "l")
 
 # plot all this out with all chains
 
 npar <- ncol(rds[[1]])
-pdf("./fuzzy_plots/first_run.pdf")
+pdf("./fuzzy_plots/spatial_covariates.pdf")
 for(i in 1:npar){
   print(i)
-  my_parm <- colnames(rds[[1]])[i]
+  my_parm <- colnames(sc[[1]])[i]
   my_range <- range(
     sapply(
-      rds,
+      sc,
       function(x) x[,i]
     )
   )
   
   plot(
-    rds[[1]][,i],
+    sc[[1]][,i],
     ylim = my_range,
     type = "l",
     main = my_parm
@@ -107,7 +125,7 @@ for(i in 1:npar){
   my_col <- c("red", "green", "blue")
   for(j in 2:4){
     lines(
-      rds[[j]][,i],
+      sc[[j]][,i],
       col = my_col[j-1]
     )
   }
@@ -115,9 +133,9 @@ for(i in 1:npar){
 dev.off()
 
 
-
+# model summary
 MCMCvis::MCMCsummary(
-  rds,
+  sc,
   digits=2
 )
 
