@@ -1,6 +1,11 @@
 
-
 # Spatial covariates model run
+library(scales)
+
+# The One Script to Run Them All
+source("./R/parallel_data_prep.R") 
+source("./nimble/three_cov_model.R")
+
 
 
 library(scales)
@@ -11,11 +16,6 @@ library(MCMCvis)
 
 source("./R/spatial_covariates_data_prep.R") 
 source("./nimble/spatial_covariates_model.R")
-
-
-
-set.seed(14)
-
 
 run_MCMC_allcode <- function(seed, data, cons) {
   
@@ -52,6 +52,19 @@ run_MCMC_allcode <- function(seed, data, cons) {
     data = data,
     inits = core_inits
   )
+  conf <- configureMCMC(
+    longest_shot, 
+    monitors = c(
+      "delta_beta",
+      "gamma_beta",
+      "phi_beta",
+      "psi_beta",
+      "rho_beta"), 
+    thin = 1
+  )
+  Rmcmc <- buildMCMC(conf)
+  compiledList <- compileNimble(longest_shot, Rmcmc)
+  Cmcmc <- compiledList$Rmcmc
   
   CmyModel <- compileNimble(longest_shot)
   
@@ -60,6 +73,7 @@ run_MCMC_allcode <- function(seed, data, cons) {
   
   results <- runMCMC(CmyMCMC, niter = 50000, nburnin = 10000, nchains = 1,
                      setSeed = seed, inits = core_inits)
+
   
   return(results)
 

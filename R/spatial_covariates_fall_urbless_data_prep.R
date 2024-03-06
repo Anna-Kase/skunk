@@ -230,6 +230,7 @@ season_vec[grep("OC", my_seasons)] <- 1
 #  up is to take the cumulative sum of season_vec and then add 1.
 year_vec <- cumsum(season_vec) + 1
 
+
 # Covariate scripts - can be sourced individually,
 # but one file is written that contains all three spatial
 # covariates -- to avoid bugs becuase they seem to randomly
@@ -283,11 +284,11 @@ for(i in 1:dim(site_km_array)[3]){
 delta_array <- array(NA, dim=c(nsite,nsite,5, nseason))
 for(i in 1:nsite){
   for(j in 1:nseason){
-  delta_array[,,1,j] <- 1
-  delta_array[i,,2,j] <-dm[i,2] - dm[,2]  
-  delta_array[i,,3,j] <- dm[i,3] - dm[,3]
-  delta_array[i,,4,j] <- dm[i,4] - dm[,4]
-  delta_array[i,,5,j] <- dmt[i,6,j] - dmt[,6,j] 
+    delta_array[,,1,j] <- 1
+    delta_array[i,,2,j] <-dm[i,2] - dm[,2]  
+    delta_array[i,,3,j] <- dm[i,3] - dm[,3]
+    delta_array[i,,4,j] <- dm[i,4] - dm[,4]
+    delta_array[i,,5,j] <- dmt[i,6,j] - dmt[,6,j] 
   }
 }
 for(j in 1:nseason){
@@ -320,6 +321,3 @@ constant_list <- list(
   season_vec = season_vec,
   year_vec = year_vec
 ) 
-
-
-

@@ -1,9 +1,13 @@
 
+library(nimble)
+library(dplyr)
+
+
 # Intercept only model brier score
 
 
 # read in saved RDS file if not already loaded
-#chain_output <- readRDS("../skunk_rds/intercept.rds")
+chain_output <- readRDS("./skunk_rds/intercept_only.rds")
 
 
 # Sub-sample the posterior so these arrays are not as huge
@@ -11,7 +15,7 @@ set.seed(1995)
 
 my_samples2 <- sample(
   1:nrow(chain_output),
-  5000
+  2500
 )
 
 mod_sub <- chain_output[my_samples2,]
@@ -154,40 +158,9 @@ for(t in 2:nseason){
 # Make psi_prob aka forecast probabilities (f[i,t]) for Brier Scores
 
 # Create empty matrix
-psi_prob <- array(NA, dim=c(length(my_samples2), 
+fpsi_prob <- array(NA, dim=c(length(my_samples2), 
                             constant_list$nsite, constant_list$nseason))
 
-# Fill in psi values at t = 1 (just the straight psi values from the posterior)
-for(i in 1:nsite){
-  psi_prob[,i,1] <- mc$psi
-}
-
-# Now fill in the the psi_prob array for the rest of the seasons
-# Here we do not hard code anything, rather if the species was not present
-# we leave the psi probability as the psi value from the MCMC posterior.
-# If the species was present, then the psi probability is calculated based
-# on the linear predictors from the dynamic occupancy model formula: 
-# (z[i,t] * theta[i,t]) + ((1 - z[i,t]) * I) + ((1 - z[i,t]) * (1 - I) * gamma)
-for(t in 2:nseason){
-  for(i in 1:nsite){
-    num <- (z[,i,t-1] * mc$phi) + 
-      ((1-z[,i,t-1]) * zeta[,i,t-1] * delta_bar[,i,t-1]) +
-      ((1-z[,i,t-1]) * (1-zeta[,i,t-1])*mc$gamma)
-    psi_prob[,i,t] <- num
-  }
-}
-
-
-# Calculate Brier Scores based on the difference of mean squares of the
-# psi_prob array (the occurrence probability
-# based on observed species presence, presence in the neighborhood, and
-# colonization from other) and the z array (species occurrence)
-BS <- (psi_prob - z)^2
-mean(BS)
-
-
-
-# forecasting z
 
 # forecasted z matrix
 fz <- array(NA, dim=c(length(my_samples2), nsite, 5))
@@ -208,63 +181,21 @@ fdelta_bar[,,1] <- delta_bar[,,nseason]
 
 for(t in 2:5){
   for(i in 1:nsite){
-    num <- (fz[,i,1] * mc$phi) +
+    fpsi_prob[,i,t] <- (fz[,i,1] * mc$phi) +
       ((1-fz[,i,1]) * fzeta[,i,1] * fdelta_bar[,i,1]) +
       ((1-fz[,i,1]) * (1-fzeta[,i,1])*mc$gamma)
-    dnm1 <- 1 - num
-    num <- num * (1 - mc$rho)^median(constant_list$J)
-    fz_prob[,i,t] <- num/ (num+dnm1)
   }
   # now simulating the forecasted z matrix
   fz[,,t] <- rbinom(
     prod(dim(fz)[1:2]),
     size = 1,
-    prob = fz_prob[,,t]
+    prob = fpsi_prob[,,t]
   )
 }
 
-# calculate forecasted brier score
-fBS <- (fz_prob - fz)^2
-mean(fBS)
 
 
 
-
-
-# forecasted z matrix
-fz <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fz[,,1] <- z[,,nseason]
-
-# forecasted z_prob 
-fz_prob <- array(NA, dim=c(length(my_samples2), nsite, 4))
-
-# forecasted site neighbors
-fzeta <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fzeta[,,1] <- zeta[,,nseason]
-
-# forecasted zm*(log(1-d_vec))
-fdelta_bar <- array(NA, dim=c(length(my_samples2), nsite, 5))
-fdelta_bar[,,1] <- delta_bar[,,nseason]
-
-
-
-for(t in 2:5){
-  for(i in 1:nsite){
-    fz_prob[,i,t-1] <- (fz[,i,1] * mc$phi) +
-      ((1-fz[,i,1]) * fzeta[,i,1] * fdelta_bar[,i,1]) +
-      ((1-fz[,i,1]) * (1-fzeta[,i,1])*mc$gamma)
-    
-  }
-  # now simulating the forecasted z matrix
-  fz[,,t] <- rbinom(
-    prod(dim(fz)[1:2]),
-    size = 1,
-    prob = fz_prob[,,t-1]
-  )
-}
-# drop the 'known' season at this point so we are just
-#  left with the forecasts.
-fz <- fz[,,-1]
 # This generates fz. From there, we need to get
 # 1. The detection / non-detection data we held out.
 # 2. The number of days each camera trap was operational
@@ -291,6 +222,16 @@ fy <- matrix(
 # make binary
 fy[fy>0] <- 1
 
+
+fj <- matrix(
+  fyd$J,
+  ncol=fynseason,
+  nrow=fynsite
+)
+
+fj[fj==0] <- NA
+
+
 # get number of mcmc samples
 nsim <- dim(fz)[1]
 brier_post <- array(
@@ -304,14 +245,10 @@ brier_post <- array(
 
 
 
-fj <- matrix(
-  fyd$J,
-  ncol=fynseason,
-  nrow=fynsite
-)
-
-fj[fj==0] <- NA
-
+# drop the 'known' season at this point so we are just
+#  left with the forecasts.
+fz <- fz[,,-1]
+fpsi_prob <- fpsi_prob[,,-1]
 
 for(i in 1:nsite){
   for(t in 1:4){

@@ -1,9 +1,5 @@
 
 
-
-
-
-
 spatial_covariates_fall_urbless <- nimble::nimbleCode({
   for(i in 1:nsite){
     logit(psi[i,1]) <- inprod(
@@ -79,6 +75,7 @@ spatial_covariates_fall_urbless <- nimble::nimbleCode({
           delta_array[i,ii,1:ncovar_delta,t]
         ) + (delta_fall*season_vec[t]) +
           delta_year * year_vec[t]
+
       }
     }
   }

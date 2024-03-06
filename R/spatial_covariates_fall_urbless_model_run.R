@@ -84,7 +84,7 @@ stopCluster(my_cluster)
 saveRDS(chain_output, file = "../skunk_rds/spatial_covariates_fall_urbless.rds")
 
 
-scfu <- readRDS("../skunk_rds/spatial_covariates_fall_urbless.rds")
+scfu <- readRDS("../skunk/spatial_covariates_fall_urbless.rds")
 
 head(scfu[[1]])
 
@@ -104,6 +104,7 @@ for(i in 1:npar){
     )
   )
   
+  
   plot(
     scfu[[1]][,i],
     ylim = my_range,
@@ -122,10 +123,12 @@ dev.off()
 
 
 
+
 MCMCvis::MCMCsummary(
   scfu,
   digits=2
 )
+
 
 
 

@@ -1,12 +1,13 @@
 
 
 # lawn covariate
-# library(dplyr)
-# library(sf)
-# library(uwinspatialtools)
+library(dplyr)
+library(sf)
+library(uwinspatialtools)
 
 # source spatial points file
-# source("./R/creating_spatial_points.R")
+source("./R/creating_spatial_points.R")
+
 
 
 # Dowload data from:

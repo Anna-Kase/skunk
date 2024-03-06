@@ -117,3 +117,4 @@ if(!"water_dist" %in% colnames(my_covariates)){
     row.names = FALSE
   )
 }
+
