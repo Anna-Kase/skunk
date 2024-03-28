@@ -16,8 +16,12 @@ This document describes all of the files present in the repository.
 [Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
 
 ## The working directory
-Aside from the aforementioned folders, the working directory here stores the `.gitignore` file for this repository, this README file (`README.md`) and the .Rproj file (for if you are using RStudio, `skunks.Rproj`).
+Aside from the aforementioned folders, the working directory here stores the `.gitignore` file for this repository, this README file (`README.md`) and the `.Rproj` file (for if you are using RStudio, `skunks.Rproj`).
 
 [Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
 
 ## The data folder (`./data`)
+This folder has ____ files and 1 sub-folder. 
+
+**|`./data/complete_data.csv`|** The camera trap data used in our analysis. This csv file has 3,075 rows and 9 columns.
+
