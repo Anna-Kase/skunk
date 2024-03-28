@@ -14,12 +14,12 @@ This repository stores all of the data and code used to fit a dynamic occupancy 
 
 This document describes all of the files present in the repository.
 
-[Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
+[Back to table of contents ⤒](##-links-to-different-parts-of-the-readme-file)
 
 ## The working directory
 Aside from the aforementioned folders, the working directory here stores the `.gitignore` file for this repository, this README file (`README.md`) and the `.Rproj` file (for if you are using RStudio, `skunks.Rproj`).
 
-[Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
+[Back to table of contents ⤒](##-links-to-different-parts-of-the-readme-file)
 
 ## The data folder (`./data`)
 This folder has ____ files and 1 sub-folder. 
@@ -75,5 +75,7 @@ This folder has ____ files and 1 sub-folder.
 
 This folder contains 35 R scripts. We have grouped these scripts based upon the function they perform in the overall scheme of the analysis and the relative order in which they would be run if someone was interested in recreating this analysis.
 
-### Group 1 - Function Scripts – These scripts contain various functions that are sourced in other scripts to complete the analysis
+**Group 1 - Function Scripts** – These scripts contain various functions that are sourced in other scripts to complete the analysis
+
+
 
