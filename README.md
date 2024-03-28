@@ -73,3 +73,7 @@ This folder has ____ files and 1 sub-folder.
 
 ## The R folder (`./R`)
 
+This folder contains 35 R scripts. We have grouped these scripts based upon the function they perform in the overall scheme of the analysis and the relative order in which they would be run if someone was interested in recreating this analysis.
+
+### Group 1 - Function Scripts – These scripts contain various functions that are sourced in other scripts to complete the analysis
+
