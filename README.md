@@ -13,7 +13,7 @@ This repository stores all of the data and code used to fit a dynamic occupancy 
 
 This document describes all of the files present in the repository.
 
-[Back to table of contents](##links-to-different-parts-of-the-readme-file)
+[Back to table of contents⤒](##links-to-different-parts-of-the-readme-file)
 
 ## The working directory
 
