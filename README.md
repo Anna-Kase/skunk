@@ -83,6 +83,7 @@ This folder contains 35 R scripts. We have grouped these scripts based upon the 
 | **mcmc_functions.R**    | Functions to extract the MCMC posterior from raw model RDS outputs           | Only Base R used      |
 | **raster_extraction.R** | Functions to extract spatial data from raster files and calculate proportion | `cli`, `raster`, `sf` |
 
+
 **Group 2 - Preparing Spatial Covariates** - These scripts source and extract spatial data, calculate covariate values for each site, and compile data into the `./data/site_covariates.csv`
 
 | File                             | Description                                                                                          | Packages Required     |
@@ -90,5 +91,6 @@ This folder contains 35 R scripts. We have grouped these scripts based upon the 
 | **creating_spatial_points.R**    | Creates spatial points for each site and projects them into UTM                                      | `dplyr`, `sf`         |
 | **dist_water_cov.R**             | Generates the shortest Euclidian distances between each site and a permanent body of water           | `dplyr`, `sf`      |
 | **managed_lawn_cov.R**           | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site | `dplyr`, `sf` |
+| **scaled_covariates.R**          | Extracts the mean housing density, proportion of tree canopy cover, and the proportion of developed open space, and generates the urban intensity metric from a principal component analysis using the aforementioned variables   | `dplyr`, `sf`   |
 
 
