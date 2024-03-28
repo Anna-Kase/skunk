@@ -42,7 +42,7 @@ This folder has ____ files and 1 sub-folder.
 **| `./data/site_covariates.csv` |** The spatial covariate (urbanization score, distance to water, and proportion of managed open space) values for each site. This csv file is generated from the `creating_spatial_points.R`, `dist_water_cov.R`, `managed_lawn_cov.R`, and `scaled_covariates.R` scripts located in the `./R` folder. This csv file has 107 rows and 7 columns.
 
 | Column  | Data Type | Explanation                                                                                                                                                                                                  |
-| ------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
 | Site    | `factor`    | The site associated to this data point                                                                                                                                                                       |
 | HU10    | `numeric`    | The mean housing density per meter<sup>2</sup> within a 1 kilometer radius of a site                                                                                                                                                         |
