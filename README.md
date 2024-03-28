@@ -37,7 +37,6 @@ This folder has ____ files and 1 sub-folder.
 | Y       | `integer`   | The number of days the species was detected during a given season                                                                                                                                            |
 | J       | `integer`   | The number of days the camera trap was operational during a given season. If `J == 0` then no sampling occurred                                                                                                |
 
-[Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
 
 **| `./data/site_covariates.csv` |** The spatial covariate (urbanization score, distance to water, and proportion of managed open space) values for each site. This csv file is generated from the `creating_spatial_points.R`, `dist_water_cov.R`, `managed_lawn_cov.R`, and `scaled_covariates.R` scripts located in the `./R` folder. This csv file has 107 rows and 7 columns.
 
@@ -50,4 +49,26 @@ This folder has ____ files and 1 sub-folder.
 | urb        | `numeric` | Urban intensity metric created from a principal component analysis using mean housing density, mean tree cover, and mean impervious cover within a 1 kilometer radius of a site |
 | water_dist | `numeric` | The shortest Euclidian distance between a site and a permanent body of water in meters                                                                                          |
 | open_dev   | `numeric` | The mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site          |
+
+
+**| `./data/original_z_sim_values.csv` |**
+
+**| `./data/scaled_simulation_covariates.csv` |**
+
+**| `./data/phi_gamma_delta_by_season.RDS` |**
+
+**| `./data/simulation_neighbors.RDS` |**
+
+**| `./data/raw_sim_covariates/dist2water.csv` |**
+
+**| `./data/raw_sim_covariates/point_locs.csv` |**
+
+**| `./data/raw_sim_covariates/urb_covars.csv` |**
+
+**| `./data/raw_sim_covariates/urban_openspace.csv` |**
+
+
+[Back to table of contents ⤒](##links-to-different-parts-of-the-readme-file)
+
+
 
