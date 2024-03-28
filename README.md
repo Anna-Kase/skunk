@@ -101,12 +101,12 @@ These scripts source and extract spatial data, calculate covariate values for ea
 **Group 3 - Data Prep**
 These scripts prepare the camera trap and covariate data for the specified model. The scripts are listed in the same order here as the hypotheses in Table 1 of the manuscript. Every script uses the `dplyr` and `sf` packages.
 
-**intercept_data_prep.R
-	spatial_covariates_data_prep.R
-	fall_term_data_prep.R
-	spatial_covariates_fall_data_prep.R
-	spatial_covariates_inx_data_prep.R
-	spatial_covariates_fall_urbless_data_prep.R**
+**intercept_data_prep.R**
+**spatial_covariates_data_prep.R**
+**fall_term_data_prep.R**
+**spatial_covariates_fall_data_prep.R**
+**spatial_covariates_inx_data_prep.R**
+**spatial_covariates_fall_urbless_data_prep.R**
 
 
 
