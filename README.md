@@ -96,17 +96,5 @@ These scripts source and extract spatial data, calculate covariate values for ea
 | **managed_lawn_cov.R**        | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site                                                | `dplyr`, `sf`                               |
 | **scaled_covariates.R**       | Extracts the mean housing density, proportion of tree canopy cover, and the proportion of developed open space, and generates the urban intensity metric from a principal component analysis using the aforementioned variables | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
 
-
 **Group 3 - Data Prep**
-These scripts prepare the camera trap and covariate data for the specified model. The scripts are listed in the same order here as the hypotheses in Table 1 of the manuscript. Every script uses the `dplyr` and `sf` packages.
-
-**| `intercept_data_prep.R` |**
-**| `spatial_covariates_data_prep.R` |**
-**| `fall_term_data_prep.R` |**
-**| `spatial_covariates_fall_data_prep.R` |**
-**| `spatial_covariates_inx_data_prep.R` |**
-**| `spatial_covariates_fall_urbless_data_prep.R` |**
-
-
-
-
+These scripts prepare the camera trap detection/non-detection data, spatial covariates, and temporal covariates for the specified model
