@@ -23,5 +23,17 @@ Aside from the aforementioned folders, the working directory here stores the `.g
 ## The data folder (`./data`)
 This folder has ____ files and 1 sub-folder. 
 
-**|`./data/complete_data.csv`|** The camera trap data used in our analysis. This csv file has 3,075 rows and 9 columns.
+**| `./data/complete_data.csv` |** The camera trap data used in our analysis. This csv file has 3,075 rows and 9 columns.
+
+| Column  | Data Type | Explanation                                                                                                                                                                                                  |
+| ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Species | factor    | The species associated to this data point                                                                                                                                                                    |
+| Season  | factor    | A seasonal code for the season the data comes from. It combines the first two letters of the season and the last two digits of the year. Seasonal codes are SP = Spring, SU = Summer, FA = Fall, WI = Winter |
+| Site    | factor    | The site associated to this data point                                                                                                                                                                       |
+| City    | factor    | The city abbreviation associated to this data point                                                                                                                                                          |
+| Long    | numeric   | The longitude of the site associated to this data point (WGS 84)                                                                                                                                             |
+| Lat     | numeric   | The latitude of the site associated to this data point (WGS 84)                                                                                                                                              |
+| Crs     | integer   | The coordinate reference system code for the site coordinates                                                                                                                                                |
+| Y       | integer   | The number of days the species was detected during a given season                                                                                                                                            |
+| J       | integer   | The number of days the camera trap was operational during a given season. If J == 0 then no sampling occurred                                                                                                |
 
