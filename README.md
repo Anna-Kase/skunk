@@ -75,7 +75,20 @@ This folder has ____ files and 1 sub-folder.
 
 This folder contains 35 R scripts. We have grouped these scripts based upon the function they perform in the overall scheme of the analysis and the relative order in which they would be run if someone was interested in recreating this analysis.
 
-**Group 1 - Function Scripts** – These scripts contain various functions that are sourced in other scripts to complete the analysis
+**Group 1 - Functions** – These scripts contain various functions that are sourced in other scripts to complete the analysis
 
+| File                    | Description                                                                  | Packages Required     |
+| ----------------------- | ---------------------------------------------------------------------------- | --------------------- |
+| **init_functions.R**    | Functions to assign initial values to parameters during model run            | Only Base R used      |
+| **mcmc_functions.R**    | Functions to extract the MCMC posterior from raw model RDS outputs           | Only Base R used      |
+| **raster_extraction.R** | Functions to extract spatial data from raster files and calculate proportion | `cli`, `raster`, `sf` |
+
+**Group 2 - Preparing Spatial Covariates** - These scripts source and extract spatial data, calculate covariate values for each site, and compile data into the `./data/site_covariates.csv`
+
+| File                             | Description                                                                                          | Packages Required     |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
+| **creating_spatial_points.R**    | Creates spatial points for each site and projects them into UTM                                      | `dplyr`, `sf`         |
+| **dist_water_cov.R**             | Generates the shortest Euclidian distances between each site and a permanent body of water           | `dplyr`, `sf`      |
+| **managed_lawn_cov.R**           | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site | `dplyr`, `sf` |
 
 
