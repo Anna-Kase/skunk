@@ -176,7 +176,16 @@ These scripts are used to simulated striped skunk occupancy across the Chicagola
 
 ### **Group 7 - Plotting**
 
-These scripts are used to plot occupancy and its processes, and ultimately create the figures in the manuscrpt.
+These scripts are used to plot occupancy and its processes, and ultimately create the figures in the manuscrpt. 
+All output figures are saved into the `./plots` folder.
+
+| File                                     | Description                                                                                                                                                                      | Required Packages            |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **random_colonization_plotting.R**       | Plots random colonization probabilities (γ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space), and season. | `bbplot`, `dplyr`, `MCMCvis` |
+| **neighborhood_colonization_plotting.R** | Plots the neighborhood colonization probabilities (d<sub>i,t</sub>) as function of how many occupied neighboring sites were present in the previous timestep.                    | `bbplot`, `dplyr`, `MCMCvis` |
+| **persistence.R**                        | Plots the probability of persistence (ϕ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                | `bbplot`, `dplyr`, `MCMCvis` |
+| **simulation_map_plots.R**               | Plots the simulated occupancy probability over the Chicagoland study area.                                                                                                       | `bbplot`, `prettymapr`, `sf` |
+
 
 
 
