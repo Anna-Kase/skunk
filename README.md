@@ -189,6 +189,8 @@ All output figures are saved into the `./plots` folder.
 
 
 
+**Note:** `bbplot` is a plotting package developed by Dr. Juniper Simonis that Dr. Mason Fidino has collaborated on. It can be found at https://github.com/dapperstats/bbplot.
+
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
 
 ## The nimble folder (`/.nimble`)
