@@ -138,7 +138,8 @@ These scipts require the R packages `dplyr`, `MCMCvis`, `nimble`, `parallel`, an
 
 **Group 5 - Brier Scores**
 
-These scripts calculate the Brier score to be used in model selection for each model from the model output RDS files and out of sample detection data. 
+These scripts calculate the Brier score to be used in model selection for each model from the model output RDS files and out of sample detection data.  
+
 **Note:** The `calculate_all_briers.R` is the only script that needs to be run as it sources the individual model Brier score calculation scripts listed below in the same order as our hypotheses in Table 1 of the manuscript.
 
 **intercept_brier_score.R** 
@@ -160,4 +161,6 @@ These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
 **Group 6 - Simulations**
 
 These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
+
+
 
