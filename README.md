@@ -75,7 +75,7 @@ This folder has ____ files and 1 sub-folder.
 
 This folder contains 35 R scripts. We have grouped these scripts based upon the function they perform in the overall scheme of the analysis and the relative order in which they would be run if someone was interested in recreating this analysis.
 
-**Group 1 - Functions**  
+# **Group 1 - Functions**  
 These scripts contain various functions that are sourced in other scripts to complete the analysis
 
 | File                    | Description                                                                  | Packages Required     |
@@ -86,7 +86,7 @@ These scripts contain various functions that are sourced in other scripts to com
 
 
 
-**Group 2 - Preparing Spatial Covariates**  
+# **Group 2 - Preparing Spatial Covariates**  
 These scripts source and extract spatial data, calculate covariate values for each site, and compile data into the `./data/site_covariates.csv`
 
 | File                          | Description                                                                                                                                                                                                                     | Packages Required                           |
@@ -100,7 +100,7 @@ These scripts source and extract spatial data, calculate covariate values for ea
 **Note:** `uwinspatialtools` is an R package deleveloped by Dr. Mason Fidino, which essentially has some wrapper functions for `sf` and `raster`. It can be found at www.github/com/mfidino/uwinspatialtools.
 
 
-**Group 3 - Data Prep**
+# **Group 3 - Data Prep**
 
 These scripts prepare the detection data and appropriate spatial and temporal covariates to be input into the model. The list below follows the same order as our hypotheses in Table 1 of the manuscript. 
 
