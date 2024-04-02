@@ -8,6 +8,7 @@ Kase, A et al. The impact of local and long-distance colonization in a fragmente
 2. [The working directory](#the-working-directory)
 3. [The data folder (`./data`)](#the-data-folder-data)
 4. [The R folder (`./R`)](#the-r-folder-R)
+5. [The nimble folder (`./nimble`)](#the-nimble-folder-nimble)
 
 ## What is in this repository?
 This repository stores all of the data and code used to fit a dynamic occupancy model with explicit colonization terms, compare model outputs using Brier scores, and forecast model estimates across space and time. The folder organization separates the data (`./data`), figures from the manuscript (`./figures`), nimble models (`./nimble`), and the R code (`./R`).
@@ -188,4 +189,6 @@ All output figures are saved into the `./plots` folder.
 
 
 
+[Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
 
+## The nimble folder (`/.nimble`)
