@@ -193,4 +193,9 @@ All output figures are saved into the `./plots` folder.
 
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
 
-## The nimble folder (`/.nimble`)
+
+## The nimble folder (`./nimble`)
+
+This folder contains the 6 `nimble` scripts used to fit each model. 
+
+
