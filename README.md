@@ -100,12 +100,18 @@ These scripts source and extract spatial data, calculate covariate values for ea
 
 These scripts prepare the detection data and appropriate spatial and temporal covariates to be input into the model. The list below follows the same order as our hypotheses in Table 1 of the manuscript. 
 
-**intercept_data_prep.R**
-**spatial_covariates_data_prep.R**
-**fall_term_data_prep.R**
-**spatial_covariates_fall_data_prep.R**
-**spatial_covariates_inx_data_prep.R**
-**spatial_covariates_fall_urbless_data_prep.R**
+**intercept_data_prep.R** 
+
+**spatial_covariates_data_prep.R** 
+
+**fall_term_data_prep.R** 
+
+**spatial_covariates_fall_data_prep.R** 
+
+**spatial_covariates_inx_data_prep.R** 
+
+**spatial_covariates_fall_urbless_data_prep.R** 
+
 
 These scripts require the R packages `dplyr`, and `sf`.
 
