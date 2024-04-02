@@ -120,7 +120,7 @@ These scripts prepare the detection data and appropriate spatial and temporal co
 These scripts require the R packages `dplyr`, and `sf`.
 
 
-**Group 4 - Model Run**
+### **Group 4 - Model Run**
 
 These scripts run the models by sourcing the appropriate data prep, initial values, and nimble scripts (from the `./nimble` folder), and saving the outputs as RDS files into the `./skunk_rds` folder. The end of these scripts also include a visual check of model convergence by plotting the MCMC chains and saving the plots into the `./fuzzy_plots` folder. The list below follows the same order as our hypotheses in Table 1 of the manuscript.
 
@@ -140,7 +140,7 @@ These scripts run the models by sourcing the appropriate data prep, initial valu
 These scipts require the R packages `dplyr`, `MCMCvis`, `nimble`, `parallel`, and `scales`.
 
 
-**Group 5 - Brier Scores**
+### **Group 5 - Brier Scores**
 
 These scripts calculate the Brier score to be used in model selection for each model from the model output RDS files and out of sample detection data.  
 
@@ -162,7 +162,7 @@ These scripts calculate the Brier score to be used in model selection for each m
 These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
 
 
-**Group 6 - Simulations**
+### **Group 6 - Simulations**
 
 These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
 
@@ -174,7 +174,9 @@ These scripts are used to simulated striped skunk occupancy across the Chicagola
 | **occupancy_simulation_example.R**    | This is an example and test file for simulating occupancy through time and space using our model parameters.                                                                                                                                                                                                                                                                                                | Only Base R used                            |
 
 
-**Group 7 - Plotting**
+### **Group 7 - Plotting**
 
-These scripts are used to create the figures in the manuscript.
+These scripts are used to plot occupancy and its processes, and ultimately create the figures in the manuscrpt.
+
+
 
