@@ -98,6 +98,48 @@ These scripts source and extract spatial data, calculate covariate values for ea
 
 **Group 3 - Data Prep**
 
-This is where my description of this group goes
+These scripts prepare the detection data and appropriate spatial and temporal covariates to be input into the model. The list below follows the same order as our hypotheses in Table 1 of the manuscript. 
 
-This is where my list of files goes
+**intercept_data_prep.R**
+**spatial_covariates_data_prep.R**
+**fall_term_data_prep.R**
+**spatial_covariates_fall_data_prep.R**
+**spatial_covariates_inx_data_prep.R**
+**spatial_covariates_fall_urbless_data_prep.R**
+
+These scripts require the R packages `dplyr`, and `sf`.
+
+
+**Group 4 - Model Run**
+
+These scripts run the models by sourcing the appropriate data prep, initial values, and nimble scripts (from the `./nimble` folder), and saving the outputs as RDS files into the `./skunk_rds` folder. The end of these scripts also include a visual check of model convergence by plotting the MCMC chains and saving the plots into the `./fuzzy_plots` folder. The list below follows the same order as our hypotheses in Table 1 of the manuscript.
+
+**intercept_model_run.R**
+**spatial_covariates_model_run.R**
+**fall_term_model_run.R**
+**spatial_covariates_fall_model_run.R**
+**spatial_covariates_inx_model_run.R**
+**spatial_covariates_fall_urbless_model_run.R**
+
+These scipts require the R packages `dplyr`, `MCMCvis`, `nimble`, `parallel`, and `scales`.
+
+
+**Group 5 - Brier Scores**
+
+These scripts calculate the Brier score to be used in model selection for each model from the model output RDS files and out of sample detection data. 
+**Note:** The `calculate_all_briers.R` is the only script that needs to be run as it sources the individual model Brier score calculation scripts listed below in the same order as our hypotheses in Table 1 of the manuscript.
+
+**intercept_brier_score.R**
+**spatial_covariates_brier_score.R**
+**fall_term_brier_score.R**
+**spatial_covariates_fall_brier_score.R**
+**spatial_covariates_urbless_brier_score.R**
+**spatial_covariates_fall_urbless_brier_score.R**
+
+These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
+
+
+**Group 6 - Simulations**
+
+These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
+
