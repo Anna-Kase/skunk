@@ -86,6 +86,12 @@ These scripts contain various functions that are sourced in other scripts to com
 | **raster_extraction.R** | Functions to extract spatial data from raster files and calculate proportion | `cli`, `raster`, `sf` |
 
 
+| File                          | Description                                                                  | Packages Required     |
+| ----------------------------- | ---------------------------------------------------------------------------- | --------------------- |
+| **`./R/init_functions.R`**    | Functions to assign initial values to parameters during model run            | Only Base R used      |
+| **`./R.mcmc_functions.R`**    | Functions to extract the MCMC posterior from raw model RDS outputs           | Only Base R used      |
+| **`./R/raster_extraction.R`** | Functions to extract spatial data from raster files and calculate proportion | `cli`, `raster`, `sf` |
+
 
 ### **Group 2 - Preparing Spatial Covariates**  
 These scripts source and extract spatial data, calculate covariate values for each site, and compile data into the `./data/site_covariates.csv`
