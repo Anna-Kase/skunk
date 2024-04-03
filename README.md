@@ -251,3 +251,16 @@ This folder contains some of the raw figures (which were later cleaned up in Ink
 
 
 ## The results folder (`./skunk_rds`)
+
+This folder contains the 4 RDS model outputs.
+
+|**`intercept_only.RDS`**| The output of the intercept only model.
+
+|**`fall_term.RDS`**| The output of the model including a temporally varying dummy variable to account for striped skunk life history (H2 in Table 1 in manuscript).
+
+|**`spatial_covariates_fall2.RDS`**| The output of the model parameterized by the three site specific spatial covariates and the temporally varying dummy variable (H3 in Table 1 in manuscript).
+
+|**`spatial_covariates_fall_urbless.RDS`**| The output of the model parameterized by the three site specific spatial covariates, the temporally varying dummy variable, and the additional term to evaluate whether striped skunk have become more or less urban through time (H5 in Table 1 in manuscript).
+
+[Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
+
