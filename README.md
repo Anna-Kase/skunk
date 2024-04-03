@@ -26,7 +26,7 @@ Aside from the aforementioned folders, the working directory here stores the `.g
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
 
 ## The data folder (`./data`)
-This folder has ____ files and 1 sub-folder. 
+This folder has 6 files and 1 sub-folder [(`./data/raw_sim_covariates`)](#data-raw_sim_covariates). 
 
 **| `./data/complete_data.csv` |** The camera trap data used in our analysis. This csv file has 3,075 rows and 9 columns.
 
@@ -74,6 +74,8 @@ This folder has ____ files and 1 sub-folder.
 **| `./data/phi_gamma_delta_by_season.RDS` |** The output of a model to simulate occupancy and its parameters across Chicagoland area and through time created by [`./R/simulation_model.R`](#group-6---simulations) in the R folder (`./R`).
 
 **| `./data/simulation_neighbors.RDS` |** The output of a simulated model used to calculate the number of occupied neighbors in the previous timestep for each simulated site created by [`./R/skunk_simulation_covariate_prep.R`](#group-6---simulations) in the R folder (`./R`).
+
+The `./data/raw_sim_covariates` sub-folder contains 4 csv files. 
 
 **| `./data/raw_sim_covariates/dist2water.csv` |**
 
