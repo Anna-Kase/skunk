@@ -196,4 +196,6 @@ All output figures are saved into the `./plots` folder.
 
 This folder contains the 6 `nimble` scripts used to fit each model. 
 
+| `./nimble/intercept_model.R` | The intercept only model.
 
+| `./nimble/spatial_covariates_model.R` | The 
