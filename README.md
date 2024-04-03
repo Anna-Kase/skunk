@@ -224,4 +224,26 @@ This folder is intentionally left blank, and stored the temporary files for the 
 
 ## The plots folder (`./plots`)
 
+This folder contains some of the raw figures (which were later cleaned up in Inkscape), as well as other figures that were publication ready. All of the extra "cleaning" was related to the maps and ultimately the creation of Figure 4.
 
+| File                                     | Description                                                           |
+| ---------------------------------------- | --------------------------------------------------------------------- |
+| **\`./plots/bivariate.svg\`**            | Panel C of Figure 4 in manuscript.                                    |
+| **\`./plots/colonization_changes.svg\`** | Panel D of Figure 4 in manuscript.                                    |
+| **\`./plots/county_reference.svg\`**     | Overlay of Chicagoland county borders used for Figure 4 map creation. |
+| **\`./plots/delta_figure.tiff\`**        | Figure 3 in manuscript.                                               |
+| **\`./plots/gamma_figure.tiff\`**        | Figure 2 in manuscript.                                               |
+| **\`./plots/mean_occ_legend.svg\`**      | Legend for mean occupancy map from Panel A of Figure 4 in manuscript. |
+| **\`./plots/mean_occ_map.svg\`**         | Only the map from Panel A of Figure 4 in manuscript.                  |
+| **\`./plots/mean_occ_map.tiff\`**        | Raw Panel A of Figure 4 in manuscript.                                |
+| **\`./plots/mean_occ.svg\`**             | Panel A of Figure 4 in manuscript.                                    |
+| **\`./plots/occ_maps.pdf\`**             | Figure 4 in manuscript as a PDF file.                                 |
+| **\`./plots/occ_maps.png\`**             | Figure 4 in manuscripts as a png file.                                |
+| **\`./plots/occ_maps.tiff\`**            | Figure 4 in manuscripts as a tiff file.                               |
+| **\`./plots/phi_figure.tiff\`**          | Figure 1 in manuscript.                                               |
+| **\`./plots/sd_occ_map.svg\`**           | Only the map from Panel B of Figure 4 in manuscript.                  |
+| **\`./plots/sd_occ_map.tiff\`**          | Raw Panel B of Figure 4 in manuscript.                                |
+| **\`./plots/sd_occ.svg\`**               | Panel B of Figure 4 in manuscript.                                    |
+
+
+[Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
