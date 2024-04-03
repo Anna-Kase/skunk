@@ -196,6 +196,15 @@ All output figures are saved into the `./plots` folder.
 
 This folder contains the 6 `nimble` scripts used to fit each model. 
 
-| `./nimble/intercept_model.R` | The intercept only model.
+| **`./nimble/intercept_model.R`** | The intercept only model (no spatial or temporal predictors).
 
-| `./nimble/spatial_covariates_model.R` | The 
+| **`./nimble/spatial_covariates_model.R`** | The model parameterized by the three site specific spatial covariates (urbanization metric, distance to water, proportion developed open space; H1 in Table 1 in manuscript).
+
+| **`./nimble/fall_term_model.R`** | The model including a temporally varying dummy variable to account for striped skunk life history (H2 in Table 1 in manuscript).
+
+| **`./nimble/spatial_covariates_fall_model.R`** | The model parameterized by the three site specific spatial covariates and the temporally varying dummy variable (H3 in Table 1 in manuscript).
+
+| **`./nimble/spatial_covariates_inxs_model.R`** | The model parameterized by the three site specific spatial covariates and an additional term to evaluate whether striped skunk have become more or less urban through time (H4 in Table 1 in manuscript).
+
+| **`./nimble/spatial_covariates_fall_urbless_model.R`** | The model parameterized by the three site specific spatial covariates, the temporally varying dummy variable, and the additional term to evaluate whether striped skunk have become more or less urban through time (H5 in Table 1 in manuscript).
+
