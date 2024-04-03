@@ -306,7 +306,7 @@ Attached base packages:
 `stats`     
 `graphics`  
 `grDevices utils`     
-`datasets` 
+`datasets`
 `methods`   
 `base`     
 
@@ -315,8 +315,8 @@ Other attached packages:
 `nimble_1.0.0`   
 `bbplot_0.0.1`   
 `MCMCvis_0.16.0` 
-`sf_1.0-13`     
-`cli_3.6.1`      
+`sf_1.0-13`  
+`cli_3.6.1`    
 `dplyr_1.1.2`
 
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
