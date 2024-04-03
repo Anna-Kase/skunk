@@ -43,7 +43,7 @@ This folder has 6 files and 1 sub-folder (`./data/raw_sim_covariates`).
 | J       | `integer`   | The number of days the camera trap was operational during a given season. If `J == 0` then no sampling occurred                                                                                                |
 
 
-**| `./data/site_covariates.csv` |** The spatial covariate (urbanization score, distance to water, and proportion of managed open space) values for each site. This csv file is generated from the [`creating_spatial_points.R`, `dist_water_cov.R`, `managed_lawn_cov.R`, and `scaled_covariates.R`](#group 2---preparing-spatial-covariates) scripts located in the `./R` folder. This csv file has 107 rows and 7 columns.
+**| `./data/site_covariates.csv` |** The spatial covariate (urbanization score, distance to water, and proportion of managed open space) values for each site. This csv file is generated from the [`creating_spatial_points.R`, `dist_water_cov.R`, `managed_lawn_cov.R`, and `scaled_covariates.R`](#group-2---preparing-spatial-covariates) scripts located in the `./R` folder. This csv file has 107 rows and 7 columns.
 
 | Column     | Data Type | Explanation                                                                                                                                                                     |
 | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
