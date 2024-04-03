@@ -181,12 +181,13 @@ These scripts are used to simulated striped skunk occupancy across the Chicagola
 These scripts are used to plot occupancy and its processes, and ultimately create the figures in the manuscrpt. 
 All output figures are saved into the `./plots` folder.
 
-| File                                           | Description                                                                                                                                                                      | Required Packages            |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| **`./R/random_colonization_plotting.R`**       | Plots random colonization probabilities (γ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space), and season. | `bbplot`, `dplyr`, `MCMCvis` |
-| **`./R/neighborhood_colonization_plotting.R`** | Plots the neighborhood colonization probabilities (d<sub>i,t</sub>) as function of how many occupied neighboring sites were present in the previous timestep.                    | `bbplot`, `dplyr`, `MCMCvis` |
-| **`./R/persistence.R`**                        | Plots the probability of persistence (ϕ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                | `bbplot`, `dplyr`, `MCMCvis` |
-| **`./R/simulation_map_plots.R`**               | Plots the simulated occupancy probability over the Chicagoland study area.                                                                                                       | `bbplot`, `prettymapr`, `sf` |
+| File                                             | Description                                                                                                                                                                      | Required Packages            |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **\`./R/random_colonization_plotting.R\`**       | Plots random colonization probabilities (γ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space), and season. | `bbplot`, `dplyr`, `MCMCvis` |
+| **\`./R/neighborhood_colonization_plotting.R\`** | Plots the neighborhood colonization probabilities (d<sub>i,t</sub>) as function of how many occupied neighboring sites were present in the previous timestep.                    | `bbplot`, `dplyr`, `MCMCvis` |
+| **\`./R/persistence.R\`**                        | Plots the probability of persistence (ϕ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                | `bbplot`, `dplyr`, `MCMCvis` |
+| **\`./R/simulation_map_plots.R\`**               | Plots the simulated occupancy probability over the Chicagoland study area.                                                                                                       | `bbplot`, `prettymapr`, `sf` |
+| **\`./R/occupancy.R\`**                          | Plots the overall occupancy probability as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                               | `bbplot`, `dplyr`, `MCMCvis` |
 
 **Note:** `bbplot` is a plotting package developed by Dr. Juniper Simonis that Dr. Mason Fidino has collaborated on. It can be found at https://github.com/dapperstats/bbplot.
 
@@ -213,3 +214,11 @@ This folder contains the 6 `nimble` scripts used to fit each model.
 
 
 ## The fuzzy plots folder (`./fuzzy_plots`)
+
+This folder is intentionally left blank, and stored the temporary files for the traceplots of model parameters that allow us to visually assess MCMC chain convergence after model runs are complete.
+
+
+[Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
+
+
+
