@@ -11,6 +11,7 @@ Kase, A et al. The impact of local and long-distance colonization in a fragmente
 5. [The nimble folder (`./nimble`)](#the-nimble-folder-nimble)
 6. [The plots folder (`./plots`)](#the-plots-folder-plots)
 7. [The results folder (`./skunk_rds`)](#the-results-folder-skunk_rds)
+8. [R Package versions](#r-package-versions)
 
 ## What is in this repository?
 This repository stores all of the data and code used to fit a dynamic occupancy model with explicit colonization terms, compare model outputs using Brier scores, and forecast model estimates across space and time. The folder organization separates the data (`./data`), figures from the manuscript (`./figures`), nimble models (`./nimble`), and the R code (`./R`).
@@ -295,3 +296,25 @@ This folder contains the 4 RDS model outputs.
 
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
 
+## R package versions
+
+In our original analysis the following versions of the R packages specified throughout this README document were used:
+
+Attached base packages:
+`parallel`  
+`stats`     
+`graphics`  
+`grDevices utils`     
+`datasets` 
+`methods`   
+`base`     
+
+Other attached packages:
+`nimble_1.0.0`   
+`bbplot_0.0.1`   
+`MCMCvis_0.16.0` 
+`sf_1.0-13`     
+`cli_3.6.1`      
+`dplyr_1.1.2`
+
+[Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
