@@ -79,12 +79,6 @@ This folder contains 35 R scripts. We have grouped these scripts based upon the 
 ### **Group 1 - Functions**  
 These scripts contain various functions that are sourced in other scripts to complete the analysis
 
-| File                    | Description                                                                  | Packages Required     |
-| ----------------------- | ---------------------------------------------------------------------------- | --------------------- |
-| **init_functions.R**    | Functions to assign initial values to parameters during model run            | Only Base R used      |
-| **mcmc_functions.R**    | Functions to extract the MCMC posterior from raw model RDS outputs           | Only Base R used      |
-| **raster_extraction.R** | Functions to extract spatial data from raster files and calculate proportion | `cli`, `raster`, `sf` |
-
 
 | File                          | Description                                                                  | Packages Required     |
 | ----------------------------- | ---------------------------------------------------------------------------- | --------------------- |
@@ -96,13 +90,13 @@ These scripts contain various functions that are sourced in other scripts to com
 ### **Group 2 - Preparing Spatial Covariates**  
 These scripts source and extract spatial data, calculate covariate values for each site, and compile data into the `./data/site_covariates.csv`
 
-| File                          | Description                                                                                                                                                                                                                     | Packages Required                           |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| **creating_spatial_points.R** | Creates spatial points for each site and projects them into UTM                                                                                                                                                                 | `dplyr`, `sf`                               |
-| **dist_water_cov.R**          | Generates the shortest Euclidian distances between each site and a permanent body of water                                                                                                                                      | `dplyr`, `sf`                               |
-| **managed_lawn_cov.R**        | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site                                                | `dplyr`, `sf`                               |
-| **scaled_covariates.R**       | Extracts the mean housing density, proportion of tree canopy cover, and the proportion of developed open space, and generates the urban intensity metric from a principal component analysis using the aforementioned variables | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
 
+| File                                | Description                                                                                                                                                                                                                     | Packages Required                           |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **`./R/creating_spatial_points.R`** | Creates spatial points for each site and projects them into UTM                                                                                                                                                                 | `dplyr`, `sf`                               |
+| **`./R/dist_water_cov.R`**          | Generates the shortest Euclidian distances between each site and a permanent body of water                                                                                                                                      | `dplyr`, `sf`                               |
+| **`./R/managed_lawn_cov.R`**        | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site                                                | `dplyr`, `sf`                               |
+| **`./R/scaled_covariates.R`**       | Extracts the mean housing density, proportion of tree canopy cover, and the proportion of developed open space, and generates the urban intensity metric from a principal component analysis using the aforementioned variables | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
 
 **Note:** `uwinspatialtools` is an R package deleveloped by Dr. Mason Fidino, which essentially has some wrapper functions for `sf` and `raster`. It can be found at www.github/com/mfidino/uwinspatialtools.
 
@@ -111,17 +105,17 @@ These scripts source and extract spatial data, calculate covariate values for ea
 
 These scripts prepare the detection data and appropriate spatial and temporal covariates to be input into the model. The list below follows the same order as our hypotheses in Table 1 of the manuscript. 
 
-**intercept_data_prep.R** 
+**`./R/intercept_data_prep.R`** 
 
-**spatial_covariates_data_prep.R** 
+**`./R/spatial_covariates_data_prep.R`** 
 
-**fall_term_data_prep.R** 
+**`./R/fall_term_data_prep.R`** 
 
-**spatial_covariates_fall_data_prep.R** 
+**`./R/spatial_covariates_fall_data_prep.R`** 
 
-**spatial_covariates_inx_data_prep.R** 
+**`./R/spatial_covariates_inx_data_prep.R`** 
 
-**spatial_covariates_fall_urbless_data_prep.R** 
+**`./R/spatial_covariates_fall_urbless_data_prep.R`** 
 
 
 These scripts require the R packages `dplyr`, and `sf`.
@@ -131,17 +125,17 @@ These scripts require the R packages `dplyr`, and `sf`.
 
 These scripts run the models by sourcing the appropriate data prep, initial values, and nimble scripts (from the `./nimble` folder), and saving the outputs as RDS files into the `./skunk_rds` folder. The end of these scripts also include a visual check of model convergence by plotting the MCMC chains and saving the plots into the `./fuzzy_plots` folder. The list below follows the same order as our hypotheses in Table 1 of the manuscript.
 
-**intercept_model_run.R** 
+**`./R/intercept_model_run.R`** 
 
-**spatial_covariates_model_run.R** 
+**`./R/spatial_covariates_model_run.R`** 
 
-**fall_term_model_run.R** 
+**`./R/fall_term_model_run.R`** 
 
-**spatial_covariates_fall_model_run.R** 
+**`./R/spatial_covariates_fall_model_run.R`** 
 
-**spatial_covariates_inx_model_run.R** 
+**`./R/spatial_covariates_inx_model_run.R`** 
 
-**spatial_covariates_fall_urbless_model_run.R** 
+**`./R/spatial_covariates_fall_urbless_model_run.R`** 
 
 
 These scipts require the R packages `dplyr`, `MCMCvis`, `nimble`, `parallel`, and `scales`.
@@ -153,17 +147,17 @@ These scripts calculate the Brier score to be used in model selection for each m
 
 **Note:** The `calculate_all_briers.R` is the only script that needs to be run as it sources the individual model Brier score calculation scripts listed below in the same order as our hypotheses in Table 1 of the manuscript.
 
-**intercept_brier_score.R** 
+**`./R/intercept_brier_score.R`** 
 
-**spatial_covariates_brier_score.R** 
+**`./R/spatial_covariates_brier_score.R`** 
 
-**fall_term_brier_score.R** 
+**`./R/fall_term_brier_score.R`** 
 
-**spatial_covariates_fall_brier_score.R** 
+**`./R/spatial_covariates_fall_brier_score.R`** 
 
-**spatial_covariates_urbless_brier_score.R** 
+**`./R/spatial_covariates_urbless_brier_score.R`** 
 
-**spatial_covariates_fall_urbless_brier_score.R** 
+**`./R/spatial_covariates_fall_urbless_brier_score.R`** 
 
 
 These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
@@ -173,27 +167,25 @@ These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
 
 These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
 
-| File                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                 | Required Packages                           |
-| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| **skunk_simulation_query_covars.R**   | Creates a grid covering the Chicagoland area and extracts spatial covariate data from original data sources fore each grid cell rather than individual study sites. Grid cells and spatial covariate data are written into the following csv files and saved into the `raw_sim_covariates` sub-folder in the `./data` folder: `point_locs.csv`, `urb_covars.csv`, `dist2water.csv`,  `urban_openspace.csv`. | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
-| **skunk_simulation_covariate_prep.R** | Prepares spatial covariate data and number of neighboring sites data for each site to be used in the simulated model. Spatial covariate data are written into a csv file (\`./data/scaled_simulation_covariates.csv\`), and neighbor data are written into an RDS file (\`./data/simulation_neighbors.RDS\`).                                                                                               | `dplyr`, `sf`                               |
-| **simulation_model.R**                | Runs a model to simulate occupancy and its parameters across Chicagoland area and through time. The output is saved into the `./data` folder as and RDS file (\`phi_gamma_delta_by_season.RDS\`).                                                                                                                                                                                                           | `dplyr`                                     |
-| **occupancy_simulation_example.R**    | This is an example and test file for simulating occupancy through time and space using our model parameters.                                                                                                                                                                                                                                                                                                | Only Base R used                            |
 
+| File                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                 | Required Packages                           |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **`./R/skunk_simulation_query_covars.R`**   | Creates a grid covering the Chicagoland area and extracts spatial covariate data from original data sources fore each grid cell rather than individual study sites. Grid cells and spatial covariate data are written into the following csv files and saved into the `raw_sim_covariates` sub-folder in the `./data` folder: `point_locs.csv`, `urb_covars.csv`, `dist2water.csv`,  `urban_openspace.csv`. | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
+| **`./R/skunk_simulation_covariate_prep.R`** | Prepares spatial covariate data and number of neighboring sites data for each site to be used in the simulated model. Spatial covariate data are written into a csv file (\`./data/scaled_simulation_covariates.csv\`), and neighbor data are written into an RDS file (\`./data/simulation_neighbors.RDS\`).                                                                                               | `dplyr`, `sf`                               |
+| **`./R/simulation_model.R`**                | Runs a model to simulate occupancy and its parameters across Chicagoland area and through time. The output is saved into the `./data` folder as and RDS file (\`phi_gamma_delta_by_season.RDS\`).                                                                                                                                                                                                           | `dplyr`                                     |
+| **`./R/occupancy_simulation_example.R`**    | This is an example and test file for simulating occupancy through time and space using our model parameters.                                                                                                                                                                                                                                                                                                | Only Base R used                            |
 
 ### **Group 7 - Plotting**
 
 These scripts are used to plot occupancy and its processes, and ultimately create the figures in the manuscrpt. 
 All output figures are saved into the `./plots` folder.
 
-| File                                     | Description                                                                                                                                                                      | Required Packages            |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| **random_colonization_plotting.R**       | Plots random colonization probabilities (γ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space), and season. | `bbplot`, `dplyr`, `MCMCvis` |
-| **neighborhood_colonization_plotting.R** | Plots the neighborhood colonization probabilities (d<sub>i,t</sub>) as function of how many occupied neighboring sites were present in the previous timestep.                    | `bbplot`, `dplyr`, `MCMCvis` |
-| **persistence.R**                        | Plots the probability of persistence (ϕ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                | `bbplot`, `dplyr`, `MCMCvis` |
-| **simulation_map_plots.R**               | Plots the simulated occupancy probability over the Chicagoland study area.                                                                                                       | `bbplot`, `prettymapr`, `sf` |
-
-
+| File                                           | Description                                                                                                                                                                      | Required Packages            |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **`./R/random_colonization_plotting.R`**       | Plots random colonization probabilities (γ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space), and season. | `bbplot`, `dplyr`, `MCMCvis` |
+| **`./R/neighborhood_colonization_plotting.R`** | Plots the neighborhood colonization probabilities (d<sub>i,t</sub>) as function of how many occupied neighboring sites were present in the previous timestep.                    | `bbplot`, `dplyr`, `MCMCvis` |
+| **`./R/persistence.R`**                        | Plots the probability of persistence (ϕ<sub>i,t</sub>) as a function of the three spatial covariates (urbanization, distance to water, and developed open space).                | `bbplot`, `dplyr`, `MCMCvis` |
+| **`./R/simulation_map_plots.R`**               | Plots the simulated occupancy probability over the Chicagoland study area.                                                                                                       | `bbplot`, `prettymapr`, `sf` |
 
 **Note:** `bbplot` is a plotting package developed by Dr. Juniper Simonis that Dr. Mason Fidino has collaborated on. It can be found at https://github.com/dapperstats/bbplot.
 
