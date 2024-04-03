@@ -140,7 +140,7 @@ These scripts source and extract spatial data, calculate covariate values for ea
 | **`./R/managed_lawn_cov.R`**        | Generates the mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site                                                | `dplyr`, `sf`                               |
 | **`./R/scaled_covariates.R`**       | Extracts the mean housing density, proportion of tree canopy cover, and the proportion of developed open space, and generates the urban intensity metric from a principal component analysis using the aforementioned variables | `dplyr`, `raster`, `sf`, `uwinspatialtools` |
 
-**Note:** `uwinspatialtools` is an R package deleveloped by Dr. Mason Fidino, which essentially has some wrapper functions for `sf` and `raster`. It can be found at www.github/com/mfidino/uwinspatialtools.
+**Note:** `uwinspatialtools` is an R package deleveloped by Dr. Mason Fidino, which essentially has some wrapper functions for `sf` and `raster`. It can be found at www.github.com/mfidino/uwinspatialtools.
 
 
 ### **Group 3 - Data Prep**
