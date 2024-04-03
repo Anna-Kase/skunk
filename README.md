@@ -95,9 +95,22 @@ The `./data/raw_sim_covariates` sub-folder contains 4 csv files.
 | crs    | `integer` | The coordinate reference system code for the site coordinates       |
 
 
-**| `./data/raw_sim_covariates/urb_covars.csv` |** The 
+**| `./data/raw_sim_covariates/urb_covars.csv` |** The raw urban metric covariates for each simulated site to be used in principal componenent analysis to generate an urban intensity metric for each site, created by [`./R/skunk_simulation_query_covars.R`](#group-6---simulations) in the `./R` folder. This file contains 4067 rows and 4 columns.
 
-**| `./data/raw_sim_covariates/urban_openspace.csv` |**
+| Column | Data Type | Explanation                                                                          |
+| ------ | --------- | ------------------------------------------------------------------------------------ |
+| Site   | `factor`  | The simulated site associated to this data point                                     |
+| HU10   | `numeric` | The mean housing density per meter<sup>2</sup> within a 1 kilometer radius of a site |
+| tree   | `numeric` | The mean proportion of tree canopy cover within a 1 kilometer radius of a site       |
+| imperv | `numeric` | The mean proportion of impervious cover within a 1 kilometer radius of a site        |
+
+
+**| `./data/raw_sim_covariates/urban_openspace.csv` |** The proportion of developed open space for each simulated site created by [`./R/skunk_simulation_query_covars.R`](#group-6---simulations) in the `./R` folder. This file contains 4067 rows and 2 columns.
+
+| Column   | Data Type | Explanation                                                                                                                                                            |
+| -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Site     | `factor`  | The simulated site associated to this data point                                                                                                                       |
+| open_dev | `numeric` | The mean proportion of developed open space (areas in which impervious surfaces account for less than 20 percent of total cover) within a 1 kilometer radius of a site |
 
 
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
