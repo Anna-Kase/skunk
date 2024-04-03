@@ -301,6 +301,7 @@ This folder contains the 4 RDS model outputs.
 In our original analysis the following versions of the R packages specified throughout this README document were used:
 
 Attached base packages:
+
 `parallel`  
 `stats`     
 `graphics`  
@@ -310,6 +311,7 @@ Attached base packages:
 `base`     
 
 Other attached packages:
+
 `nimble_1.0.0`   
 `bbplot_0.0.1`   
 `MCMCvis_0.16.0` 
