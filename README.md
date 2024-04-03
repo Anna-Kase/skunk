@@ -73,7 +73,7 @@ This folder has ____ files and 1 sub-folder.
 
 **| `./data/phi_gamma_delta_by_season.RDS` |** The output of a model to simulate occupancy and its parameters across Chicagoland area and through time created by `./R/simulation_model.R` in the R folder (`./R`)(#group-6-simulations).
 
-**| `./data/simulation_neighbors.RDS` |** The output of a simulated model used to calculate the number of occupied neighbors in the previous timestep for each simulated site created by `./R/skunk_simulation_covariate_prep.R` in the R folder (`./R`)(#group-6-simulations).
+**| `./data/simulation_neighbors.RDS` |** The output of a simulated model used to calculate the number of occupied neighbors in the previous timestep for each simulated site created by `./R/skunk_simulation_covariate_prep.R` in the R folder (`./R`) - [Group 6 - Simulations](#group-6-simulations).
 
 **| `./data/raw_sim_covariates/dist2water.csv` |**
 
@@ -177,7 +177,7 @@ These scripts calculate the Brier score to be used in model selection for each m
 These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
 
 
-### [**Group 6 - Simulations**]
+### **Group 6 - Simulations**
 
 These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
 
