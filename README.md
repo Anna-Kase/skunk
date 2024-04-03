@@ -177,7 +177,7 @@ These scripts calculate the Brier score to be used in model selection for each m
 These scripts require the R packages `dplyr`, `MCMCvis`, and `nimble`.
 
 
-### **Group 6 - Simulations**
+### [**Group 6 - Simulations**]
 
 These scripts are used to simulated striped skunk occupancy across the Chicagoland study area from the output of the best predicting model, spatial covariates and species life history (Hypothesis 3 from Table 1 in manuscript).
 
