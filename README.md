@@ -302,21 +302,22 @@ In our original analysis the following versions of the R packages specified thro
 
 Attached base packages:
 
-`parallel`  
-`stats`     
-`graphics`  
-`grDevices utils`     
+`parallel`
+`stats`
+`graphics`
+`grDevices utils`
 `datasets`
-`methods`   
-`base`     
+`methods`
+`base`
 
 Other attached packages:
 
-`nimble_1.0.0`   
-`bbplot_0.0.1`   
-`MCMCvis_0.16.0` 
-`sf_1.0-13`  
-`cli_3.6.1`    
+`nimble_1.0.0`
+`bbplot_0.01`
+`MCMCvis_0.16.0`
+`sf_1.0-13`
+`cli_3.6.1`
 `dplyr_1.1.2`
+
 
 [Back to table of contents ⤒](#links-to-different-parts-of-the-readme-file)
