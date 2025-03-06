@@ -12,6 +12,9 @@ utm_crs <- 32616
 oz <- read.csv(
   "./data/original_z_sim_values.csv"
 )
+if("X" %in% colnames(oz)){
+  oz <- oz[,-which(colnames(oz) == "X")]
+}
 nsamp <- 10000
 
 # average occupancy each site and season
@@ -38,10 +41,11 @@ gr$occ_sd <- occ_sd
 
 # read in county maps
 
-county_path <- "../../GIS/county_maps/illinois_county/"
+county_path <- "D:/GIS/counties/illinois_county/"
+  
 county <- sf::st_read(
   county_path,
-  layer = "IL_BNDY_County_Py"
+  layer = "Illinois"
 )
 
 
@@ -88,7 +92,7 @@ county_crop <-  sf::st_crop(
 
 
 
-water <- sf::read_sf("../../GIS/water/IL_Streams_From_100K_DLG_Ln.shp")
+water <- sf::read_sf("D:/GIS/water/IL_Streams_From_100K_DLG_Ln.shp")
 
 
 
@@ -142,14 +146,14 @@ svg(
 par(mar = c(1,1,1,1))
 
 
-my_pal <- pals::ocean.speed(11)
+my_pal <- pals::ocean.speed(13)
 
 plot(
   gr["occ_prob"],
   pch = 19,
   cex = 0.8,
   pal = my_pal,
-  nbreaks = 10,
+  nbreaks = 12,
   reset = FALSE,
   main = ""
 )
@@ -196,14 +200,14 @@ svg(
 par(mar = c(1,1,1,1))
 
 
-my_pal <- pals::brewer.blues(9)
+my_pal <- pals::brewer.blues(12)
 
 plot(
   gr["occ_sd"],
   pch = 19,
   cex = 0.8,
   pal = my_pal,
-  nbreaks = 8,
+  nbreaks = 11,
   reset = FALSE,
   main = ""
 )

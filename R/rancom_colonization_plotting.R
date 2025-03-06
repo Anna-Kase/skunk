@@ -96,7 +96,7 @@ water_gamma_fall <- t(water_gamma_fall)
 
 
 
-#### openanization ####
+#### open space ####
 
 ubounds <- range(sc$open_dev)
 ubounds
@@ -139,7 +139,7 @@ open_gamma_fall <- t(open_gamma_fall)
 windows(7, 3)
 
 tiff(
-  "./plots/gamma_figure.tiff",
+  "./plots/gamma_figure2.tiff",
   height = 3,
   width = 7,
   units = "in",
@@ -200,7 +200,7 @@ text(
 bbplot::axis_blank(1, at = c(0, 4000, 9000, 14000))
 bbplot::axis_blank(2)
 bbplot::axis_text(c(0, 4, 9, 14), side = 1, line = 0.9, at = c(0, 4000, 9000, 14000)) 
-bbplot::axis_text("Distance to water (km)", side = 1, line = 2.5)
+bbplot::axis_text("Distance to stream\nor river (km)", side = 1, line = 4)
 bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, line = 2)
 bbplot::ribbon(x = pretty_water,
                y = water_gamma[,-2], col = "lightblue4", alpha = 0.5)
