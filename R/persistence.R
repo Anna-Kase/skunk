@@ -102,7 +102,7 @@ open_phi <- t(open_phi)
 windows(7, 3)
 
 tiff(
-  "./plots/phi_figure.tiff",
+  "./plots/phi_figure2.tiff",
   height = 3,
   width = 7,
   units = "in",
@@ -150,7 +150,7 @@ layout(m)
   bbplot::axis_blank(1, at = c(0, 4000, 9000, 14000))
   bbplot::axis_blank(2)
   bbplot::axis_text(c(0, 4, 9, 14), side = 1, line = 0.9, at = c(0, 4000, 9000, 14000)) 
-  bbplot::axis_text("Distance to water (km)", side = 1, line = 2.5)
+  bbplot::axis_text("Distance to stream\nor river (km)", side = 1, line = 4)
   bbplot::axis_text("Pr(Persistence)", side = 2, outer = TRUE, at = 0.6, line = 2)
   bbplot::ribbon(x = pretty_water,
                  y = water_phi[,-2], col = "goldenrod", alpha = 0.5)

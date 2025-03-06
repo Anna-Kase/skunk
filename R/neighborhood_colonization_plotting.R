@@ -44,7 +44,21 @@ our_m <- matrix(
                      quantile,
                      probs = c(0.025,0.5,0.975))
 
+ # also get average colonization in other seasons for long-distance
+ #  colonization.
  
+ no_neighbors <- quantile(
+   plogis(
+     mc$gamma_beta[,1]
+   ),
+   probs = c(0.025,0.5,0.975)
+ )
+ no_neighbors_fall <- quantile(
+   plogis(
+     mc$gamma_beta[,1] + mc$gamma_fall[,1]
+   ),
+   probs = c(0.025,0.5,0.975)
+ )
  
  
  #### plotting ####
@@ -64,15 +78,15 @@ tiff(
 { 
 # blank plot
 par(mar = c(5, 2, 0.5, 0.5), oma = c(0, 4, 0, 0), lend = 1)
-bbplot::blank(xlim = c(0.5, 3.5), ylim = c(0, 0.8), bty = "l")
+bbplot::blank(xlim = c(-0.5, 3.5), ylim = c(0, 0.8), bty = "l")
 
 # axis hash marks
-bbplot::axis_blank(1, at = seq(1,3, by = 1))
+bbplot::axis_blank(1, at = seq(0,3, by = 1))
 bbplot::axis_blank(2)
 
 # axis hash mark labels
-bbplot::axis_text(text = seq(1,3,by=1), line = 0.9,
-                  side = 1, at = seq(1,3,1))
+bbplot::axis_text(text = seq(0,3,by=1), line = 0.9,
+                  side = 1, at = seq(0,3,1))
 bbplot::axis_text(side = 2, las = 1, line = 0.4)
 
 # axis labels
@@ -81,6 +95,50 @@ bbplot::axis_text("Number of neighboring sites \n with striped skunk",
 bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.65)
 
 # layer on data
+
+lines(
+  x = rep(-0.125, 2),
+  y = no_neighbors_fall[-2],
+  col = "goldenrod",
+  lwd = 3
+)
+points(
+  x =  -0.125,
+  y = no_neighbors_fall[2],
+  pch = 20,
+  col = "black",
+  cex = 2
+)
+points(
+  x =  -0.125,
+  y = no_neighbors_fall[2],
+  pch = 20,
+  col = "goldenrod",
+  cex = 1.5
+)
+
+lines(
+  x = rep(0.125,2),
+  y = no_neighbors[-2],
+  col ="lightblue4",
+  lwd = 3
+)
+
+points(
+  x = 0.125,
+  y = no_neighbors[2],
+  pch = 18,
+  col = "black",
+  cex = 1.5
+)
+points(
+  x = 0.125,
+  y = no_neighbors[2],
+  pch = 18,
+  col = "lightblue4",
+  cex = 1
+)
+
 
 for(i in 1:3){
   lines(
@@ -130,7 +188,7 @@ points(
 
 # legend
 legend(
-  x= 0.4,
+  x= -0.4,
   y = 0.85,
   legend = c("Fall", "Spring, Summer, Winter"),
   pch = c(20,18),
