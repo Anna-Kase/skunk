@@ -18,14 +18,11 @@ mc <- split_mcmc(output)
 
 
 
-our_m <- matrix(
-  c(1,1,1,0,1,1,0,0,1),
-  ncol = 3,
-  nrow = 3,
-  byrow=TRUE
-)
+our_m <- diag(4)
+our_m[upper.tri(our_m)] <- 1
 
- delta_vec_fall <-log(1- plogis(mc$delta_beta[,c(1,1,1)] + mc$delta_fall[,1]))
+
+ delta_vec_fall <-log(1- plogis(mc$delta_beta[,c(1,1,1,1)] + mc$delta_fall[,1]))
 
  delta_vec_fall <- delta_vec_fall %*% our_m
  delta_prob_fall <- 1 - exp(delta_vec_fall)
@@ -35,7 +32,7 @@ our_m <- matrix(
                      probs = c(0.025,0.5,0.975))
  
  
- delta_vec <-log(1- plogis(mc$delta_beta[,c(1,1,1)]))
+ delta_vec <-log(1- plogis(mc$delta_beta[,c(1,1,1,1)]))
  
  delta_vec <- delta_vec %*% our_m
  delta_prob <- 1 - exp(delta_vec)
@@ -78,21 +75,21 @@ tiff(
 { 
 # blank plot
 par(mar = c(5, 2, 0.5, 0.5), oma = c(0, 4, 0, 0), lend = 1)
-bbplot::blank(xlim = c(-0.5, 3.5), ylim = c(0, 0.8), bty = "l")
+bbplot::blank(xlim = c(-0.5, 4.5), ylim = c(0, 1), bty = "l")
 
 # axis hash marks
-bbplot::axis_blank(1, at = seq(0,3, by = 1))
+bbplot::axis_blank(1, at = seq(0,4, by = 1))
 bbplot::axis_blank(2)
 
 # axis hash mark labels
-bbplot::axis_text(text = seq(0,3,by=1), line = 0.9,
-                  side = 1, at = seq(0,3,1))
+bbplot::axis_text(text = seq(0,4,by=1), line = 0.9,
+                  side = 1, at = seq(0,4,1))
 bbplot::axis_text(side = 2, las = 1, line = 0.4)
 
 # axis labels
 bbplot::axis_text("Number of neighboring sites \n with striped skunk", 
                   side = 1, line = 3)
-bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.65)
+bbplot::axis_text("Pr(Local colonization)", side = 2, outer = TRUE, at = 0.65)
 
 # layer on data
 
@@ -140,7 +137,7 @@ points(
 )
 
 
-for(i in 1:3){
+for(i in 1:4){
   lines(
     x = rep(i-0.125,2),
     y = delta_prob_fall[-2,i],
@@ -149,21 +146,21 @@ for(i in 1:3){
   )
 }
 points(
-  x = c(1:3)-0.125,
+  x = c(1:4)-0.125,
   y = delta_prob_fall[2,],
   pch = 20,
   col = "black",
   cex = 2
 )
 points(
-  x = c(1:3)-0.125,
+  x = c(1:4)-0.125,
   y = delta_prob_fall[2,],
   pch = 20,
   col = "goldenrod",
   cex = 1.5
 )
 
-for(i in 1:3){
+for(i in 1:4){
   lines(
     x = rep(i+0.125,2),
     y = delta_prob[-2,i],
@@ -172,14 +169,14 @@ for(i in 1:3){
   )
 }
 points(
-  x = c(1:3)+0.125,
+  x = c(1:4)+0.125,
   y = delta_prob[2,],
   pch = 18,
   col = "black",
   cex = 1.5
 )
 points(
-  x = c(1:3)+0.125,
+  x = c(1:4)+0.125,
   y = delta_prob[2,],
   pch = 18,
   col = "lightblue4",
@@ -189,7 +186,7 @@ points(
 # legend
 legend(
   x= -0.4,
-  y = 0.85,
+  y = 0.95,
   legend = c("Fall", "Spring, Summer, Winter"),
   pch = c(20,18),
   col = c("goldenrod", "lightblue4"),

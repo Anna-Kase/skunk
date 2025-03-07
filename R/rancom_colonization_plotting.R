@@ -167,7 +167,7 @@ bbplot::axis_text(text = seq(-3, 4, 1), side = 1, line = 0.9,
                   at = seq(-3, 4, 1))
 bbplot::axis_text(side = 2, las = 1, line = 0.4)
 bbplot::axis_text("Urbanization", side = 1, line = 2.5)
-bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, 
+bbplot::axis_text("Pr(Long-distance colonization)", side = 2, outer = TRUE, at = 0.6, 
                   line = 2)
 bbplot::ribbon(x = pretty_urb,
                y = urb_gamma[,-2], col = "lightblue4", alpha = 0.5)
@@ -201,7 +201,7 @@ bbplot::axis_blank(1, at = c(0, 4000, 9000, 14000))
 bbplot::axis_blank(2)
 bbplot::axis_text(c(0, 4, 9, 14), side = 1, line = 0.9, at = c(0, 4000, 9000, 14000)) 
 bbplot::axis_text("Distance to stream\nor river (km)", side = 1, line = 4)
-bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, line = 2)
+bbplot::axis_text("Pr(Long-distance colonization)", side = 2, outer = TRUE, at = 0.6, line = 2)
 bbplot::ribbon(x = pretty_water,
                y = water_gamma[,-2], col = "lightblue4", alpha = 0.5)
 bbplot::ribbon(x = pretty_water, 
@@ -226,8 +226,8 @@ bbplot::axis_blank(1, at = seq(0, 0.4, by = 0.1))
 bbplot::axis_blank(2)
 bbplot::axis_text(text = seq(0, 0.4, 0.1), side = 1, line = 0.9,
                   at = seq(0, 0.4, 0.1))
-bbplot::axis_text("Urban open space", side = 1, line = 2.5)
-bbplot::axis_text("Pr(Colonization)", side = 2, outer = TRUE, at = 0.6, 
+bbplot::axis_text("Developed open space", side = 1, line = 2.5)
+bbplot::axis_text("Pr(Long-distance colonization)", side = 2, outer = TRUE, at = 0.6, 
                   line = 2)
 bbplot::ribbon(x = pretty_open,
                y = open_gamma[,-2], col = "lightblue4", alpha = 0.5)

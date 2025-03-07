@@ -171,7 +171,7 @@ layout(m)
   bbplot::axis_blank(2)
   bbplot::axis_text(text = seq(0, 0.4, 0.1), side = 1, line = 0.9,
                     at = seq(0, 0.4, 0.1))
-  bbplot::axis_text("Urban open space", side = 1, line = 2.5)
+  bbplot::axis_text("Developed open space", side = 1, line = 2.5)
   bbplot::axis_text("Pr(Persistence)", side = 2, outer = TRUE, at = 0.6, 
                     line = 2)
   bbplot::ribbon(x = pretty_open,
